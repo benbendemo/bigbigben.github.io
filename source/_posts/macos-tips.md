@@ -26,7 +26,7 @@ curl: (7) Failed to connect to raw.githubusercontent.com port 443: Connection re
 
 在https://www.ipaddress.com/查询raw.githubusercontent.com的真实IP。
 
-![](/Users/shawn/Nodejs/Hexo/ipaddress_search.jpg)
+![](macos-tips/ipaddress_search.jpg)
 
 2. 修改hosts
 
