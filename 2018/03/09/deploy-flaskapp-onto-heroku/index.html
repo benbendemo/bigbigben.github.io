@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Python,Flask,Heroku," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="(题图来自Heroku官网截图，注册Heroku需要翻墙) 学习完《FlaskWeb开发：基于Python的Web应用开发实战》(第一版)后，我参照本书及网络上的方法将Flasky项目第一版成功部署到Heroku，这里是README.md说明纪录。部署上线网址:https://mgflask.herokuapp.com 部署项目上线对我来说并不是一件容易的事，Flaskapp项目代码全部来自于f">
+<meta name="keywords" content="Python,Flask,Heroku">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署Python Flasky项目到Heroku">
+<meta property="og:url" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/index.html">
+<meta property="og:site_name" content="大西洋暖流">
+<meta property="og:description" content="(题图来自Heroku官网截图，注册Heroku需要翻墙) 学习完《FlaskWeb开发：基于Python的Web应用开发实战》(第一版)后，我参照本书及网络上的方法将Flasky项目第一版成功部署到Heroku，这里是README.md说明纪录。部署上线网址:https://mgflask.herokuapp.com 部署项目上线对我来说并不是一件容易的事，Flaskapp项目代码全部来自于f">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180309-175951@2x_1.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-174649.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-175754.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-175911.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-181147@2x.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-182814.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-182003.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-184234.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-183620.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180309-174226%402x.jpg">
+<meta property="og:updated_time" content="2020-09-12T06:04:21.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="部署Python Flasky项目到Heroku">
+<meta name="twitter:description" content="(题图来自Heroku官网截图，注册Heroku需要翻墙) 学习完《FlaskWeb开发：基于Python的Web应用开发实战》(第一版)后，我参照本书及网络上的方法将Flasky项目第一版成功部署到Heroku，这里是README.md说明纪录。部署上线网址:https://mgflask.herokuapp.com 部署项目上线对我来说并不是一件容易的事，Flaskapp项目代码全部来自于f">
+<meta name="twitter:image" content="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180309-175951@2x_1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/"/>
+
+
+
+
+
+  <title>部署Python Flasky项目到Heroku | 大西洋暖流</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <!-- add github ribbon on 2018/05/04 -->
+    <a href="https://github.com/benbendemo" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    </style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大西洋暖流</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一切都在不完美中前行</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!-- <div id="container-openwrite"> -->
+              
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">部署Python Flasky项目到Heroku</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T17:56:26+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/09/deploy-flaskapp-onto-heroku/" class="leancloud_visitors" data-flag-title="部署Python Flasky项目到Heroku">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,383
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div id="container-openwrite">
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180309-175951@2x_1.jpg" alt="Heroku Interface"></p>
+<p>(题图来自Heroku官网截图，注册Heroku需要翻墙)</p>
+<p>学习完《FlaskWeb开发：基于Python的Web应用开发实战》(第一版)后，我参照本书及网络上的方法将<a href="https://github.com/miguelgrinberg/flasky-first-edition.git" target="_blank" rel="external"><strong>Flasky项目第一版</strong></a>成功部署到Heroku，这里是README.md说明纪录。部署上线网址:<a href="https://mgflask.herokuapp.com" target="_blank" rel="external">https://mgflask.herokuapp.com</a></p>
+<p>部署项目上线对我来说并不是一件容易的事，Flaskapp项目代码全部来自于flasky-first-edition，不过结合实际业务测试和功能测试，对很多地方进行了修改，部署分为两个部分，Part1是提取正确的git版本，Part2是push代码到Heroku。</p>
+<a id="more"></a>
+<h4 id="Part1-提取正确的git版本"><a href="#Part1-提取正确的git版本" class="headerlink" title="Part1: 提取正确的git版本"></a>Part1: 提取正确的git版本</h4><p>首先参考<a href="http://cocode.cc/t/first-update-heroku/3711" target="_blank" rel="external">(first update)终于成功部署在heroku上了，欢迎交流</a>里面的第一、二两步提取正确代码版本，这两步操作过程中，我踩过的坑如下。</p>
+<h4 id="Flasky项目版本"><a href="#Flasky项目版本" class="headerlink" title="Flasky项目版本"></a>Flasky项目版本</h4><p>作者guog是在15年11月部署的，现在是18年3月，时间隔了这么久，Miguel Grinberg的Flasky项目本身就迭代了很多版本。我使用的书是《FlaskWeb开发：基于Python的Web应用开发实战》第一版，因此Flasky版本必须使用<strong><a href="https://github.com/miguelgrinberg/flasky-first-edition.git" target="_blank" rel="external">Flasky项目第一版</a></strong>，一开始我取错了版本，拿的是<strong><a href="https://github.com/miguelgrinberg/flasky.git" target="_blank" rel="external">Flasky项目第二版</a></strong>，参照guog操作时总是弄不对。千万注意这一点。</p>
+<h4 id="Github-checkout操作务必熟练"><a href="#Github-checkout操作务必熟练" class="headerlink" title="Github checkout操作务必熟练"></a>Github checkout操作务必熟练</h4><p>部署项目到Heroku这个过程很考验对Git命令的熟练程度，如果你对Git命令各种操作已经驾轻就熟，那么相对来说，这里你会容易很多。我在实际部署中，采用的是<a href="http://cocode.cc/t/flask-heroku/4253" target="_blank" rel="external">分享一下flask程序部署到heroku平台的过程</a>作者Rain建议的17c版本，并没有使用guog同学说的17d版本。以下是Rain同学建议使用17c的理由。</p>
+<blockquote>
+<p>3.要使用Heroku,程序必须托管在远程Git仓库中，本地也要有一个一样的Git仓库。你的程序代码应该与作者代码的版本”17c“类似,17b也行,不过用17c的话部署的过程就不用再打代码和提交变动到远程仓库，所以我建议是用17c。（ps 17d版本是把程序架设在传统的托管上的， 跟部署在Heroku无关）</p>
+</blockquote>
+<p>通过这篇<a href="http://blog.csdn.net/github_35160620/article/details/53869906" target="_blank" rel="external">Git如何clone非maser分支代码</a>讲解git checkout命令的文章，我弄明白了git checkout操作，不带疑问地将17c版本提取出来。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-174649.jpg" alt="git branch"></p>
+<p>将flasky-first-edition clone到本地后，使用git branch和git tag命令可以检查当前分支和所有历史版本。然后使用“git checkout 17c”就可以提取我们需要的17c版本。这两个命令现在对我来说驾轻就熟，但解决问题之前，花费了我不少时间。</p>
+<h4 id="拷贝Git代码注意事项"><a href="#拷贝Git代码注意事项" class="headerlink" title="拷贝Git代码注意事项"></a>拷贝Git代码注意事项</h4><p>我按照作者guog描述的步骤，使用”git clone <a href="https://github.com/benbendemo/Flaskapp" target="_blank" rel="external">https://github.com/benbendemo/Flaskapp</a>“ 操作先在本地建立了一个Flaskapp仓库（注意:一开始Flaskapp是空仓库）。然后将flasky-first-edition里面全部内容拷贝到Flaskapp里面来，有前辈提醒注意不要把flasky-first-edition包里的.git文件夹拷贝到待部署的仓库（我的就是Flaskapp），否则后面会出错。可能我使用的是Mac，并没有发生这个情况。</p>
+<p>Mac终端里使用”ls -a”查看目录，使用”open .git”可以打开.git文件夹（<strong>真的是文件夹！</strong>）。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-175754.jpg" alt=".git文件夹"></p>
+<p>点击.git文件夹里面的config文本文件，可以查看当前git仓库的源信息。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-175911.jpg" alt=".git文件夹信息"></p>
+<p>我就是使用这种方法，确保从flasky-first-edition包拷贝到Flaskapp包，git配置信息没有弄错。</p>
+<h4 id="Part2-push代码到Heroku"><a href="#Part2-push代码到Heroku" class="headerlink" title="Part2: push代码到Heroku"></a>Part2: push代码到Heroku</h4><p>部署过程过程参照作者Rain这篇<a href="http://cocode.cc/t/flask-heroku/4253" target="_blank" rel="external">分享一下flask程序部署到heroku平台的过程</a>文章。当然，部署过程中出现很多问题，他这篇文章写于2015年12月，相对现在也有些古老。Heroku平台本身进行了迭代升级，比如postgresql版本升级到了10.2，requirements.txt里面需要安装的驱动psycopg2对应也需要使用新的版本。另外，需要提一下的是，<u>文中提醒在程序修改数据库的地方都加上”db.session.commit()”</u>。我没有这样做，直接用的17c源码，部署成功后测试各个功能，没有出现任何问题。</p>
+<h4 id="Heroku创建数据库名称发生变化"><a href="#Heroku创建数据库名称发生变化" class="headerlink" title="Heroku创建数据库名称发生变化"></a>Heroku创建数据库名称发生变化</h4><p>基本操作和Rain同学的一致，只不过现在创建出来的Postgresql数据库，名称不是他文中所写的形式，现在变成”postgresql-concave-36557”这种形式。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-181147@2x.jpg" alt="heroku create postgresql"></p>
+<p>使用Heroku config设置好环境变量后，就可以将本地Flaskapp仓库里面的内容提交到Heroku服务器。设置config变量参照Rain同学文中步骤即可，我就不多余贴图了。</p>
+<h4 id="Delopy到Heroku注意事项"><a href="#Delopy到Heroku注意事项" class="headerlink" title="Delopy到Heroku注意事项"></a>Delopy到Heroku注意事项</h4><p>注意，Rain同学文章中，在设置好config参数后，直接使用”git push heroku master”进行Deploy，这是有问题的，完整的git提交命令如下，这也是Heroku官方给出的Deploy操作。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> git add .</span></div><div class="line"><span class="meta">$</span><span class="bash"> git commit -am <span class="string">"make it better"</span>(描述信息可以随便输，会保存到git操作记录里面)</span></div></pre></td></tr></table></figure>
+<h4 id="创建runtime-txt文件"><a href="#创建runtime-txt文件" class="headerlink" title="创建runtime.txt文件"></a>创建runtime.txt文件</h4><p>我在push代码过程中，遇到图中”No default language could be detected for this app”的问题。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-182814.jpg" alt="buildpack error"></p>
+<p>上面这个问题，在Flaskapp仓库下面使用”git init”命令即可解决，解决后重新push时提示安装的是python 3.6.4版本，因为Heroku现在对新建的Python应用默认都使用<code>python-3.6.4</code>版本。在参考SO人家的发帖后，通过Heroku官网给出关于<a href="https://devcenter.heroku.com/articles/buildpacks" target="_blank" rel="external">Buildpacks</a>和<a href="https://devcenter.heroku.com/articles/python-runtimes#supported-python-runtimes" target="_blank" rel="external">Python runtime</a>的提示，我创建了runtime.txt文件，加入到了Flaskapp包的根目录。</p>
+<p>在Mac终端Flaskapp目录下使用”touch runtime.txt”即可创建文件，文件内容用来指定Heroku部署项目时使用的编译环境，这里我使用<code>python-2.7.14</code>。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-182003.jpg" alt="runtime.txt"></p>
+<h4 id="安装Postgresql驱动包psycopg2报错"><a href="#安装Postgresql驱动包psycopg2报错" class="headerlink" title="安装Postgresql驱动包psycopg2报错"></a>安装Postgresql驱动包psycopg2报错</h4><p>解决了Python部署问题后，我以为可以大功告成，没想到在安装psycopg2包时出现报错。报错提示：”Error: could not determine PostgreSQL version from ‘10.3’”，在SO和github上都搜不到解决办法。最后想到可能是psycopg2包和当前Postgresql版本不匹配的原因。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-184234.jpg" alt="Download psycopg2报错"></p>
+<p>使用”heroku pg:info”查看Heroku服务器里面Postgresql当前版本，版本号为10.2。</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180307-183620.jpg" alt="Heroku pg version"></p>
+<p>查询psycopg2官网后，最新版本是psycopg2 2.7.4。于是将requirements.txt文件”psycopg2==2.5.1”换成”psycopg2==2.7.4”。重新push后，Deploy成功。</p>
+<h4 id="部署成功信息"><a href="#部署成功信息" class="headerlink" title="部署成功信息"></a>部署成功信息</h4><p>忍不住贴出部署成功信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:Flaskapp jacksonshawn$ git push heroku master</div><div class="line">Counting objects: 96, done.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (86/86), done.</div><div class="line">Writing objects: 100% (96/96), 33.59 KiB | 0 bytes/s, done.</div><div class="line">Total 96 (delta 20), reused 0 (delta 0)</div><div class="line">remote: Compressing source files... done.</div><div class="line">remote: Building source:</div><div class="line">remote: </div><div class="line">remote: -----&gt; Python app detected</div><div class="line">remote: -----&gt; Installing python-2.7.14</div><div class="line">remote: -----&gt; Installing pip</div><div class="line">remote: -----&gt; Installing requirements with pip</div><div class="line">remote:        Collecting Flask==0.12 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 1))</div><div class="line">remote:          Downloading Flask-0.12-py2.py3-none-any.whl (82kB)</div><div class="line">remote:        Collecting Flask-Bootstrap==3.0.3.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 2))</div><div class="line">remote:          Downloading Flask-Bootstrap-3.0.3.1.tar.gz (250kB)</div><div class="line">remote:        Collecting Flask-HTTPAuth==2.7.0 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 3))</div><div class="line">remote:          Downloading Flask-HTTPAuth-2.7.0.tar.gz</div><div class="line">remote:        Collecting Flask-Login==0.3.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 4))</div><div class="line">remote:          Downloading Flask-Login-0.3.1.tar.gz</div><div class="line">remote:        Collecting Flask-Mail==0.9.0 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 5))</div><div class="line">remote:          Downloading Flask-Mail-0.9.0.tar.gz (43kB)</div><div class="line">remote:        Collecting Flask-Migrate==2.0.3 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 6))</div><div class="line">remote:          Downloading Flask-Migrate-2.0.3.tar.gz</div><div class="line">remote:        Collecting Flask-Moment==0.2.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 7))</div><div class="line">remote:          Downloading Flask-Moment-0.2.1.tar.gz</div><div class="line">remote:        Collecting Flask-PageDown==0.1.4 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 8))</div><div class="line">remote:          Downloading Flask-PageDown-0.1.4.tar.gz</div><div class="line">remote:        Collecting Flask-SQLAlchemy==2.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 9))</div><div class="line">remote:          Downloading Flask-SQLAlchemy-2.1.tar.gz (95kB)</div><div class="line">remote:        Collecting Flask-Script==2.0.5 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 10))</div><div class="line">remote:          Downloading Flask-Script-2.0.5.tar.gz (42kB)</div><div class="line">remote:        Collecting Flask-WTF==0.14.2 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 11))</div><div class="line">remote:          Downloading Flask_WTF-0.14.2-py2.py3-none-any.whl</div><div class="line">remote:        Collecting Jinja2==2.9.5 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 12))</div><div class="line">remote:          Downloading Jinja2-2.9.5-py2.py3-none-any.whl (340kB)</div><div class="line">remote:        Collecting Mako==1.0.6 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 13))</div><div class="line">remote:          Downloading Mako-1.0.6.tar.gz (575kB)</div><div class="line">remote:        Collecting Markdown==2.3.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 14))</div><div class="line">remote:          Downloading Markdown-2.3.1.tar.gz (267kB)</div><div class="line">remote:        Collecting MarkupSafe==0.23 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 15))</div><div class="line">remote:          Downloading MarkupSafe-0.23.tar.gz</div><div class="line">remote:        Collecting SQLAlchemy==1.1.5 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 16))</div><div class="line">remote:          Downloading SQLAlchemy-1.1.5.tar.gz (5.1MB)</div><div class="line">remote:        Collecting WTForms==2.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 17))</div><div class="line">remote:          Downloading WTForms-2.1.zip (553kB)</div><div class="line">remote:        Collecting Werkzeug==0.11.15 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 18))</div><div class="line">remote:          Downloading Werkzeug-0.11.15-py2.py3-none-any.whl (307kB)</div><div class="line">remote:        Collecting alembic==0.8.10 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 19))</div><div class="line">remote:          Downloading alembic-0.8.10.tar.gz (976kB)</div><div class="line">remote:        Collecting bleach==1.4.0 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 20))</div><div class="line">remote:          Downloading bleach-1.4.tar.gz</div><div class="line">remote:        Collecting blinker==1.3 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 21))</div><div class="line">remote:          Downloading blinker-1.3.tar.gz (91kB)</div><div class="line">remote:        Collecting click==6.7 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 22))</div><div class="line">remote:          Downloading click-6.7-py2.py3-none-any.whl (71kB)</div><div class="line">remote:        Collecting html5lib==1.0b3 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 23))</div><div class="line">remote:          Downloading html5lib-1.0b3.tar.gz (884kB)</div><div class="line">remote:        Collecting itsdangerous==0.24 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 24))</div><div class="line">remote:          Downloading itsdangerous-0.24.tar.gz (46kB)</div><div class="line">remote:        Collecting python-editor==1.0.3 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 25))</div><div class="line">remote:          Downloading python-editor-1.0.3.tar.gz</div><div class="line">remote:        Collecting six==1.4.1 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements/common.txt (line 26))</div><div class="line">remote:          Downloading six-1.4.1.tar.gz</div><div class="line">remote:        Collecting Flask-SSLify==0.1.4 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements.txt (line 2))</div><div class="line">remote:          Downloading Flask-SSLify-0.1.4.tar.gz</div><div class="line">remote:        Collecting gunicorn==18.0 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements.txt (line 3))</div><div class="line">remote:          Downloading gunicorn-18.0.tar.gz (366kB)</div><div class="line">remote:        Collecting psycopg2==2.7.4 (from -r /tmp/build_20fb038843640507b4fcd293d5e9fa6b/requirements.txt (line 4))</div><div class="line">remote:          Downloading psycopg2-2.7.4-cp27-cp27mu-manylinux1_x86_64.whl (2.7MB)</div><div class="line">remote:        Installing collected packages: itsdangerous, click, Werkzeug, MarkupSafe, Jinja2, Flask, Flask-Bootstrap, Flask-HTTPAuth, Flask-Login, blinker, Flask-Mail, SQLAlchemy, Flask-SQLAlchemy, Mako, python-editor, alembic, Flask-Script, Flask-Migrate, Flask-Moment, WTForms, Flask-PageDown, Flask-WTF, Markdown, six, html5lib, bleach, Flask-SSLify, gunicorn, psycopg2</div><div class="line">remote:          Running setup.py install for itsdangerous: started</div><div class="line">remote:            Running setup.py install for itsdangerous: finished with status 'done'</div><div class="line">remote:          Running setup.py install for MarkupSafe: started</div><div class="line">remote:            Running setup.py install for MarkupSafe: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-Bootstrap: started</div><div class="line">remote:            Running setup.py install for Flask-Bootstrap: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-HTTPAuth: started</div><div class="line">remote:            Running setup.py install for Flask-HTTPAuth: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-Login: started</div><div class="line">remote:            Running setup.py install for Flask-Login: finished with status 'done'</div><div class="line">remote:          Running setup.py install for blinker: started</div><div class="line">remote:            Running setup.py install for blinker: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-Mail: started</div><div class="line">remote:            Running setup.py install for Flask-Mail: finished with status 'done'</div><div class="line">remote:          Running setup.py install for SQLAlchemy: started</div><div class="line">remote:            Running setup.py install for SQLAlchemy: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-SQLAlchemy: started</div><div class="line">remote:            Running setup.py install for Flask-SQLAlchemy: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Mako: started</div><div class="line">remote:            Running setup.py install for Mako: finished with status 'done'</div><div class="line">remote:          Running setup.py install for python-editor: started</div><div class="line">remote:            Running setup.py install for python-editor: finished with status 'done'</div><div class="line">remote:          Running setup.py install for alembic: started</div><div class="line">remote:            Running setup.py install for alembic: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-Script: started</div><div class="line">remote:            Running setup.py install for Flask-Script: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-Migrate: started</div><div class="line">remote:            Running setup.py install for Flask-Migrate: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-Moment: started</div><div class="line">remote:            Running setup.py install for Flask-Moment: finished with status 'done'</div><div class="line">remote:          Running setup.py install for WTForms: started</div><div class="line">remote:            Running setup.py install for WTForms: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-PageDown: started</div><div class="line">remote:            Running setup.py install for Flask-PageDown: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Markdown: started</div><div class="line">remote:            Running setup.py install for Markdown: finished with status 'done'</div><div class="line">remote:          Running setup.py install for six: started</div><div class="line">remote:            Running setup.py install for six: finished with status 'done</div><div class="line">remote:          Running setup.py install for html5lib: started</div><div class="line">remote:            Running setup.py install for html5lib: finished with status 'done'</div><div class="line">remote:          Running setup.py install for bleach: started</div><div class="line">remote:            Running setup.py install for bleach: finished with status 'done'</div><div class="line">remote:          Running setup.py install for Flask-SSLify: started</div><div class="line">remote:            Running setup.py install for Flask-SSLify: finished with status 'done'</div><div class="line">remote:          Running setup.py install for gunicorn: started</div><div class="line">remote:            Running setup.py install for gunicorn: finished with status 'done'</div><div class="line">remote:        Successfully installed Flask-0.12 Flask-Bootstrap-3.0.3.1 Flask-HTTPAuth-2.7.0 Flask-Login-0.3.1 Flask-Mail-0.9.0 Flask-Migrate-2.0.3 Flask-Moment-0.2.1 Flask-PageDown-0.1.4 Flask-SQLAlchemy-2.1 Flask-SSLify-0.1.4 Flask-Script-2.0.5 Flask-WTF-0.14.2 Jinja2-2.9.5 Mako-1.0.6 Markdown-2.3.1 MarkupSafe-0.23 SQLAlchemy-1.1.5 WTForms-2.1 Werkzeug-0.11.15 alembic-0.8.10 bleach-1.4 blinker-1.3 click-6.7 gunicorn-18.0 html5lib-1.0b3 itsdangerous-0.24 psycopg2-2.7.4 python-editor-1.0.3 six-1.4.1</div><div class="line">remote: </div><div class="line">remote:  !     Hello! Your requirements.txt file contains the six package.</div><div class="line">remote:  !     This library is automatically installed by Heroku and shouldn't be in</div><div class="line">remote:  !     Your requirements.txt file. This can cause unexpected behavior.</div><div class="line">remote:  !       -- Much Love, Heroku.</div><div class="line">remote: </div><div class="line">remote: -----&gt; Discovering process types</div><div class="line">remote:        Procfile declares types -&gt; web</div><div class="line">remote: </div><div class="line">remote: -----&gt; Compressing...</div><div class="line">remote:        Done: 36.3M</div><div class="line">remote: -----&gt; Launching...</div><div class="line">remote:        Released v7</div><div class="line">remote:        https://mgflask.herokuapp.com/ deployed to Heroku</div><div class="line">remote: </div><div class="line">remote: Verifying deploy... done.</div><div class="line">To https://git.heroku.com/mgflask.git</div><div class="line"> * [new branch]      master -&gt; master</div></pre></td></tr></table></figure>
+<p>最后执行下面两行命令，<a href="https://mgflask.herokuapp.com" target="_blank" rel="external">https://mgflask.herokuapp.com</a> 网站可以正常访问。撒花！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">heroku run python manage.py deploy</div><div class="line">heroku restart</div></pre></td></tr></table></figure>
+<h4 id="更新代码到Github"><a href="#更新代码到Github" class="headerlink" title="更新代码到Github"></a>更新代码到Github</h4><p>最后将本地Flaskapp里面全部代码更新到我的Github远程仓库。</p>
+<blockquote>
+<p>git add .<br>git commit -m “ver 1.0” (描述信息可以随便输，会保存到git操作记录里面)<br>git push -u origin master </p>
+</blockquote>
+<h4 id="Heroku-App测试成功截图"><a href="#Heroku-App测试成功截图" class="headerlink" title="Heroku App测试成功截图"></a>Heroku App测试成功截图</h4><p>使用邮箱注册，能成功收到管理员发送的“账户确认”邮件，点击确认链接，邮箱注册确认成功。登陆后，在Home页面，能过成功显示写博客页面。（奇怪的是，我在本地Mac电脑使用17c和17d，安装这个步骤操作，注册邮箱等能够成功，但始终没有写博客页面，不知道为什么？）</p>
+<p><img src="/2018/03/09/deploy-flaskapp-onto-heroku/Jietu20180309-174226%402x.jpg" alt="Heroku Home Page"></p>
+<p>测试能够成功，Flaskapp这个练手项目就先到这里，我需要腾出时间去做其它的事情。日后有空再做完善吧。</p>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="http://cocode.cc/t/first-update-heroku/3711" target="_blank" rel="external">(first update)终于成功部署在heroku上了，欢迎交流</a></li>
+<li><a href="http://cocode.cc/t/flask-heroku/4253" target="_blank" rel="external">分享一下flask程序部署到heroku平台的过程</a></li>
+<li><a href="http://cocode.cc/t/flasky-heroku/6589" target="_blank" rel="external">【flasky/heroku/部署】（欢迎大家挑刺和补充）可能是目前为止最详细的了</a></li>
+<li><a href="https://www.jianshu.com/p/7bc34e56fa39" target="_blank" rel="external">Heroku 使用教程</a></li>
+<li><a href="http://www.cnblogs.com/lazyJavaer-lyn/p/6890388.html" target="_blank" rel="external">使用git将本地代码项目上传到github</a></li>
+</ul>
+
+      
+    </div>
+    </div>
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/about/qrcode_for_dxy-nuanliu.jpg" alt="大西洋暖流 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎订阅大西洋暖流</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    大西洋暖流
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/" title="部署Python Flasky项目到Heroku">http://bigbigben.com/2018/03/09/deploy-flaskapp-onto-heroku/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Flask/" rel="tag"><i class="fa fa-tag"></i> Flask</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Heroku/" rel="tag"><i class="fa fa-tag"></i> Heroku</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/27/learning-flask/" rel="next" title="Flask学习笔记">
+                <i class="fa fa-chevron-left"></i> Flask学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/14/python-metaclass/" rel="prev" title="Python元类的一个疑惑">
+                Python元类的一个疑惑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            <!-- </div> -->
+          </div>
+            
+
+
+            
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="大西洋暖流" />
+            
+              <p class="site-author-name" itemprop="name">大西洋暖流</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/benbendemo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/benbendemo" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/benbendemo" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/links/" target="_blank" title="Links">
+                    
+                      <i class="fa fa-fw fa-link"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                常用链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="王垠" target="_blank">王垠</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://foofish.net" title="Python之禅" target="_blank">Python之禅</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://python-web-guide.readthedocs.io/zh/latest/index.html" title="Python入坑指南" target="_blank">Python入坑指南</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb" title="Echo李金" target="_blank">Echo李金</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.linuxhub.org/share/python_flask_res.html" title="Flask资源" target="_blank">Flask资源</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/benbendemo/interview_python" title="Python面试题" target="_blank">Python面试题</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/521xueweihan/HelloGitHub" title="HelloGitHub" target="_blank">HelloGitHub</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Part1-提取正确的git版本"><span class="nav-number">1.</span> <span class="nav-text">Part1: 提取正确的git版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Flasky项目版本"><span class="nav-number">2.</span> <span class="nav-text">Flasky项目版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Github-checkout操作务必熟练"><span class="nav-number">3.</span> <span class="nav-text">Github checkout操作务必熟练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拷贝Git代码注意事项"><span class="nav-number">4.</span> <span class="nav-text">拷贝Git代码注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Part2-push代码到Heroku"><span class="nav-number">5.</span> <span class="nav-text">Part2: push代码到Heroku</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heroku创建数据库名称发生变化"><span class="nav-number">6.</span> <span class="nav-text">Heroku创建数据库名称发生变化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Delopy到Heroku注意事项"><span class="nav-number">7.</span> <span class="nav-text">Delopy到Heroku注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建runtime-txt文件"><span class="nav-number">8.</span> <span class="nav-text">创建runtime.txt文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Postgresql驱动包psycopg2报错"><span class="nav-number">9.</span> <span class="nav-text">安装Postgresql驱动包psycopg2报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署成功信息"><span class="nav-number">10.</span> <span class="nav-text">部署成功信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新代码到Github"><span class="nav-number">11.</span> <span class="nav-text">更新代码到Github</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Heroku-App测试成功截图"><span class="nav-number">12.</span> <span class="nav-text">Heroku App测试成功截图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <!-- change icon to love on 2018/05/04
+    <i class="fa fa-user"></i>
+    -->
+    <i class="fa fa-heart"></i>
+
+  </span>
+  <span class="author" itemprop="copyrightHolder">大西洋暖流</span>
+  
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">93.5k</span>
+  
+</div>
+
+
+
+<!--
+  comment by benbendemo on 2019/01/11
+  <div class="powered-by">
+  Powered By <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>
+  </div>
+-->
+
+  <div style="width:auto; margin:0 auto; padding:auto 0;">
+        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+  </div>
+
+
+  	
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Y8gLw3ps66BdpCpSQVIo7izp-gzGzoHsz", "xNNF8jlpFcWA0iVnOaAaUHLw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+  <!-- Add openwrite support -->
+  <!--
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container-openwrite',
+          blogId: '17404-1571647601910-995',
+          name: '大西洋暖流',
+          qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+          keyword: 'bigbigben',
+      });
+  </script>
+  -->
+</body>
+</html>

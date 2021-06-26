@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Python,Pandas,DataFrame,Smtplib," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="(Photo by Mia Baker on Unsplash) 今天看到又耳笔记这篇导出mysql数据，利用pandas生成excel文档，并发送邮件文章时，我决定把它实现出来。 查资料、编码、测试、优化、添加注释……花了3个多小时将全部工作完成。现在整理出来，发布在这里。本文贴出的就是全部源代码，只要安装了相应的包，在Python 2.7环境下可以直接拿过去跑，本机测试邮件能够发送成功。没有">
+<meta name="keywords" content="Python,Pandas,DataFrame,Smtplib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python+MySQLdb+Pandas+Smtplib发送邮件">
+<meta property="og:url" content="http://bigbigben.com/2018/02/10/python-smtplib/index.html">
+<meta property="og:site_name" content="大西洋暖流">
+<meta property="og:description" content="(Photo by Mia Baker on Unsplash) 今天看到又耳笔记这篇导出mysql数据，利用pandas生成excel文档，并发送邮件文章时，我决定把它实现出来。 查资料、编码、测试、优化、添加注释……花了3个多小时将全部工作完成。现在整理出来，发布在这里。本文贴出的就是全部源代码，只要安装了相应的包，在Python 2.7环境下可以直接拿过去跑，本机测试邮件能够发送成功。没有">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bigbigben.com/2018/02/10/python-smtplib/mia-baker-322559.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/02/10/python-smtplib/allAstockInfo_table.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/02/10/python-smtplib/163_email_screen_snapchat.jpg">
+<meta property="og:updated_time" content="2020-09-12T06:04:21.785Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python+MySQLdb+Pandas+Smtplib发送邮件">
+<meta name="twitter:description" content="(Photo by Mia Baker on Unsplash) 今天看到又耳笔记这篇导出mysql数据，利用pandas生成excel文档，并发送邮件文章时，我决定把它实现出来。 查资料、编码、测试、优化、添加注释……花了3个多小时将全部工作完成。现在整理出来，发布在这里。本文贴出的就是全部源代码，只要安装了相应的包，在Python 2.7环境下可以直接拿过去跑，本机测试邮件能够发送成功。没有">
+<meta name="twitter:image" content="http://bigbigben.com/2018/02/10/python-smtplib/mia-baker-322559.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bigbigben.com/2018/02/10/python-smtplib/"/>
+
+
+
+
+
+  <title>Python+MySQLdb+Pandas+Smtplib发送邮件 | 大西洋暖流</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <!-- add github ribbon on 2018/05/04 -->
+    <a href="https://github.com/benbendemo" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    </style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大西洋暖流</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一切都在不完美中前行</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!-- <div id="container-openwrite"> -->
+              
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/02/10/python-smtplib/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Python+MySQLdb+Pandas+Smtplib发送邮件</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-10T16:23:35+08:00">
+                2018-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/10/python-smtplib/" class="leancloud_visitors" data-flag-title="Python+MySQLdb+Pandas+Smtplib发送邮件">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,431
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div id="container-openwrite">
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/02/10/python-smtplib/mia-baker-322559.jpg" alt="Cover Picture"></p>
+<p>(Photo by <a href="https://unsplash.com/photos/CuoMduHwRZY?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Mia Baker</a> on <a href="https://unsplash.com/search/photos/mac?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Unsplash</a>)</p>
+<p>今天看到又耳笔记这篇<a href="http://blog.51cto.com/youerning/1708941" target="_blank" rel="external"><strong>导出mysql数据，利用pandas生成excel文档，并发送邮件</strong></a>文章时，我决定把它实现出来。</p>
+<p>查资料、编码、测试、优化、添加注释……花了3个多小时将全部工作完成。现在整理出来，发布在这里。本文贴出的就是全部源代码，只要安装了相应的包，在Python 2.7环境下可以直接拿过去跑，本机测试邮件能够发送成功。没有MySQL和Pandas也不要紧，注释掉fetch_db和gen_xls函数，直接执行sendmsg也行。</p>
+<p>目前在正则表达式匹配邮箱地址那一环节还存有缺陷，对两个点或中划线在一起的邮箱地址（比如317…817@qq.com）无法剔除，日后有待完善，如果你有好的建议，欢迎给我留言。</p>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>macOS 10.11.6 + Anaconda Navigator 1.2.1+ Python 2.7.12 + Sublime 3.0</p>
+<h4 id="技术要点"><a href="#技术要点" class="headerlink" title="技术要点"></a>技术要点</h4><ul>
+<li>MySQLdb数据库连接</li>
+<li>Pandas DataFrame转换Excel文件</li>
+<li>正则表达式匹配邮箱</li>
+<li>smtplib协议实现原理</li>
+</ul>
+<a id="more"></a>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-  </span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">Created on Fri Feb  9 17:21:39 2018</span></div><div class="line"><span class="string">func:查询Mysql结果,生成excel文件,发送到指定邮箱</span></div><div class="line"><span class="string">@author:@benbendemo </span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">import</span> MySQLdb</div><div class="line"><span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">from</span> email <span class="keyword">import</span> encoders</div><div class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</div><div class="line"><span class="keyword">from</span> email.mime.multipart <span class="keyword">import</span> MIMEMultipart</div><div class="line"><span class="keyword">from</span> email.mime.base <span class="keyword">import</span> MIMEBase</div><div class="line"><span class="keyword">import</span> smtplib</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line"><span class="comment"># 设置全局公共参数PGMname</span></div><div class="line">PGMname = <span class="string">'PGM:python_learning_send_email'</span></div><div class="line"></div><div class="line"><span class="comment"># 返回sql语句查询结果</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetch_db</span><span class="params">(sql)</span>:</span></div><div class="line"></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    fetch_db,创建数据库连接,执行sql语句查询结果</span></div><div class="line"><span class="string">    """</span></div><div class="line">    </div><div class="line">    <span class="comment"># user,passwd,db参数需要自行配置</span></div><div class="line">    db_user = MySQLdb.connect(host=<span class="string">'localhost'</span>,port=<span class="number">3306</span>,charset=<span class="string">'utf8'</span>,</div><div class="line">                              user=<span class="string">'XXXXXX'</span>,passwd=<span class="string">'XXXXXX'</span>,db=<span class="string">'XXXXXX'</span>) </div><div class="line">    cursor = db_user.cursor()</div><div class="line">    cursor.execute(<span class="string">"SET NAMES utf8;"</span>)</div><div class="line">    cursor.execute(sql)</div><div class="line">    result = cursor.fetchall()</div><div class="line">    db_user.close()</div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"OK!!! Result Type is:"</span>,type(result)</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"><span class="comment"># 将sql执行查询结果生成到excel文件</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen_xls</span><span class="params">(res,col)</span>:</span></div><div class="line"></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    gen_xls,将数据库查询结果生成excel文件</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    file_name = datetime.datetime.now().strftime(<span class="string">"%Y-%m-%d-%H-%M"</span>) + <span class="string">".sql.xlsx"</span></div><div class="line"></div><div class="line">    <span class="comment"># from_records方法要求使用列表类型作为数据源,这里需要强制转换</span></div><div class="line">    <span class="keyword">if</span> type(res) <span class="keyword">is</span> <span class="keyword">not</span> list:</div><div class="line">        res = list(res)</div><div class="line">        </div><div class="line">    <span class="comment"># from_records方法columns参数的作用是设置数据的列名,影响head行</span></div><div class="line">    df = pd.DataFrame.from_records(data=res,columns=col)</div><div class="line"></div><div class="line">    <span class="comment"># 输出到excel表格里面</span></div><div class="line">    df.to_excel(file_name,<span class="string">"Sheet1"</span>,index=<span class="keyword">True</span>,header=<span class="keyword">True</span>)</div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"OK!!! Filename is:"</span>,file_name</div><div class="line">    <span class="keyword">return</span> file_name</div><div class="line"></div><div class="line"><span class="comment"># 将生成的excel文件发送给指定邮箱</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendmsg</span><span class="params">(f_email,f_pwd,to_list,smtp_server,sendfile)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    sendmsg,使用smtplib发送邮件,这里使用网易邮箱作为发送方</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    sub = <span class="string">'主题:第六封来自Python代码的测试邮件'</span></div><div class="line">    content = <span class="string">'正文:20条mysql查询结果,生成此份Excel文件,请查收附件'</span></div><div class="line"></div><div class="line">    <span class="comment"># 邮件对象</span></div><div class="line">    msg = MIMEMultipart()</div><div class="line">    msg[<span class="string">'From'</span>] = f_email</div><div class="line">    msg[<span class="string">'Subject'</span>] = sub  </div><div class="line">    to_str = <span class="string">''</span></div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> to_list:</div><div class="line">       to_str += x + <span class="string">','</span>        </div><div class="line">    <span class="comment"># msg['To']接收的参数是str而不是list或tuple,多个地址使用逗号隔开</span></div><div class="line">    msg[<span class="string">'To'</span>] = to_str</div><div class="line">    <span class="comment"># 邮件正文是MIMEText</span></div><div class="line">    msg.attach(MIMEText(content,<span class="string">'plain'</span>,<span class="string">'utf-8'</span>))</div><div class="line"></div><div class="line">    <span class="keyword">with</span> open(sendfile,<span class="string">'rb'</span>) <span class="keyword">as</span> fp:</div><div class="line"></div><div class="line">        <span class="comment"># 设置附件的MIME类型,这里使用xls类型,application/octet-stream表示附件是下载格式</span></div><div class="line">        mime = MIMEBase(<span class="string">'application/octet-stream'</span>, <span class="string">'xls'</span>, filename=<span class="string">'sql.xlsx'</span>)</div><div class="line">        <span class="comment"># 添加头信息</span></div><div class="line">        mime.add_header(<span class="string">'Content-Disposition'</span>, <span class="string">'attachment'</span>, filename=<span class="string">'sql.xlsx'</span>)</div><div class="line">        mime.add_header(<span class="string">'Content-ID'</span>, <span class="string">'&lt;0&gt;'</span>)</div><div class="line">        mime.add_header(<span class="string">'X-Attachment-Id'</span>, <span class="string">'0'</span>)</div><div class="line">        <span class="comment"># 将附件内容读取为数据流</span></div><div class="line">        mime.set_payload(fp.read())</div><div class="line">        <span class="comment"># 用Base64编码</span></div><div class="line">        encoders.encode_base64(mime)</div><div class="line">        <span class="comment"># 添加到MIMEMultipart</span></div><div class="line">        msg.attach(mime)</div><div class="line"></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        server = smtplib.SMTP()</div><div class="line">        <span class="comment"># set_debuglevel参数设为0不打印log;设为1打印log</span></div><div class="line">        server.set_debuglevel(<span class="number">1</span>)</div><div class="line">        server.connect(smtp_server,<span class="number">25</span>)</div><div class="line">        server.starttls()</div><div class="line">        server.login(f_email,f_pwd)</div><div class="line">        server.sendmail(f_email,to_list,msg.as_string())</div><div class="line">        server.quit()</div><div class="line">        <span class="keyword">print</span> PGMname + <span class="string">":"</span> + <span class="string">"sendmsg"</span> + <span class="string">":"</span> + <span class="string">"Send Email OK!"</span></div><div class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> PGMname + <span class="string">":"</span> + <span class="string">"sendmsg"</span> + <span class="string">":"</span> + <span class="string">"Exception!"</span>,e</div><div class="line"></div><div class="line"><span class="comment"># 要查询的sql语句</span></div><div class="line">sql = <span class="string">"SELECT * FROM allAstockinfo limit 50"</span></div><div class="line"></div><div class="line"><span class="comment"># 待查询库表的列名,匹配allAstockinfo库表的列名</span></div><div class="line">col = [<span class="string">'code'</span>,<span class="string">'name'</span>,<span class="string">'outstanding'</span>,<span class="string">'totals'</span>,<span class="string">'totalAssets'</span>,<span class="string">'esp'</span>,<span class="string">'bvps'</span>,<span class="string">'pb'</span>,<span class="string">'pe'</span>,</div><div class="line"><span class="string">'reservedPerShare'</span>,<span class="string">'rev'</span>,<span class="string">'profit'</span>,<span class="string">'gpr'</span>,<span class="string">'npr'</span>,<span class="string">'holders'</span>,<span class="string">'industry'</span>,<span class="string">'area'</span>,<span class="string">'timeToMarket'</span>]</div><div class="line"></div><div class="line"><span class="comment"># 接收邮件用户列表,换成你自己的邮箱地址</span></div><div class="line">to_email = [<span class="string">'XXXXXXXX@qq.com'</span>,<span class="string">'XXXXXXXX@hotmail.com'</span>,<span class="string">'XXXXXXXX@sohu.com'</span>]</div><div class="line"></div><div class="line"><span class="comment"># 查询数据库</span></div><div class="line">res = fetch_db(sql)</div><div class="line"></div><div class="line"><span class="comment"># 将结果传给文件参数</span></div><div class="line">xlsfile = gen_xls(res,col)</div><div class="line"></div><div class="line"><span class="comment"># pattern1只能匹配纯数字邮箱,不适用</span></div><div class="line">pattern1 = <span class="string">"(^[1-9][0-9]&#123;1,10&#125;)(\@)([\w0-9]+)(\.(com|org|cn)$)"</span></div><div class="line">com_pattern1 = re.compile(pattern1)</div><div class="line"></div><div class="line"><span class="comment"># pattern2可匹配非纯数字邮箱(中间不能有两个点号或下划线连续出现的情况没有解决),pattern2包含了pattern1</span></div><div class="line">pattern2 = <span class="string">"([\w1-9][\w0-9\_\-\.]&#123;1,20&#125;)(\@)([\w0-9]+)(\.(com|org|cn)$)"</span></div><div class="line">com_pattern2 = re.compile(pattern2)</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    <span class="comment"># 输入发送邮箱账号,需要使用raw_input而不是input</span></div><div class="line">    from_email = raw_input(<span class="string">'From_email:'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">try</span>:    </div><div class="line">        m = com_pattern2.match(from_email)</div><div class="line">        <span class="keyword">print</span> <span class="string">"Group(0):"</span>,m.group(<span class="number">0</span>)</div><div class="line">        smtp_server = <span class="string">''</span>.join([<span class="string">'smtp.'</span>,m.group(<span class="number">3</span>),m.group(<span class="number">4</span>)])</div><div class="line">        </div><div class="line">        <span class="comment"># 邮箱格式正确,则使用break跳出循环       </span></div><div class="line">        <span class="keyword">break</span>    </div><div class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> PGMname + <span class="string">":"</span> + <span class="string">"Email Format Error!"</span>,e</div><div class="line"></div><div class="line"><span class="comment"># 输入发生邮箱密码,注意如果邮箱开启授权码验证(比如网易邮箱),则需要输入授权码作为密码</span></div><div class="line">from_email_pwd = raw_input(<span class="string">'From_email_pwd:'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 发送邮件</span></div><div class="line">sendmsg(from_email,from_email_pwd,to_email,smtp_server,xlsfile)</div></pre></td></tr></table></figure>
+<h4 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h4><ul>
+<li><p>生成的excel文件如下图所示，表中数据使用Tushare获取。</p>
+<p><img src="/2018/02/10/python-smtplib/allAstockInfo_table.jpg" alt="allAstockinfo Table"></p>
+</li>
+</ul>
+<ul>
+<li><p>登录邮箱，显示邮件发送成功，附件内容与Excel数据一致，没有乱码。</p>
+<p><img src="/2018/02/10/python-smtplib/163_email_screen_snapchat.jpg" alt="Email screenshot"></p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>全部代码150多行，没有什么复杂的技术难题，对老司机来说，这个任务小菜一碟。测试中遇到的难点问题，全部通过注释语句标注出来了，请重点注意。如果没有Python基础，有些地方你可能需要花一些时间理解。阮一峰博客里面有人留言说，”现在的程序员关注底层技术的越来越少了”。SMTP协议就是一个很好的例子，我们每天都在用，但根本没有想过它是如何实现的，延伸阅读里面对SMTP协议有比较详细的介绍。当然，亲自动手把这个程序写一遍，对SMTP协议会有一个更深入的理解。</p>
+<p>附<a href="https://github.com/benbendemo/learning-python/tree/master/python-smtplib" target="_blank" rel="external">GitHub地址</a>。</p>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386832745198026a685614e7462fb57dbf733cc9f3ad000" target="_blank" rel="external">SMTP发送邮件</a></li>
+<li><a href="http://blog.51cto.com/clovemfong/1702105" target="_blank" rel="external">Zabbix监控之邮件发送失败-smtp-server: 错误代码550与535</a></li>
+</ul>
+<p><strong>延伸阅读：</strong></p>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2008/06/mime.html" target="_blank" rel="external">MIME笔记</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2017/06/smtp-protocol.html" target="_blank" rel="external">如何验证 Email 地址：SMTP 协议入门教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2008/06/base64.html" target="_blank" rel="external">Base64笔记</a></li>
+</ul>
+
+      
+    </div>
+    </div>
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/about/qrcode_for_dxy-nuanliu.jpg" alt="大西洋暖流 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎订阅大西洋暖流</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    大西洋暖流
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://bigbigben.com/2018/02/10/python-smtplib/" title="Python+MySQLdb+Pandas+Smtplib发送邮件">http://bigbigben.com/2018/02/10/python-smtplib/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Pandas/" rel="tag"><i class="fa fa-tag"></i> Pandas</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/DataFrame/" rel="tag"><i class="fa fa-tag"></i> DataFrame</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Smtplib/" rel="tag"><i class="fa fa-tag"></i> Smtplib</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/08/unicode-and-utf8/" rel="next" title="Unicode和UTF-8编码">
+                <i class="fa fa-chevron-left"></i> Unicode和UTF-8编码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/24/mhxy-game-account-sold/" rel="prev" title="我把梦幻西游游戏帐号卖掉了!">
+                我把梦幻西游游戏帐号卖掉了! <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            <!-- </div> -->
+          </div>
+            
+
+
+            
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="大西洋暖流" />
+            
+              <p class="site-author-name" itemprop="name">大西洋暖流</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/benbendemo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/benbendemo" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/benbendemo" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/links/" target="_blank" title="Links">
+                    
+                      <i class="fa fa-fw fa-link"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                常用链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="王垠" target="_blank">王垠</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://foofish.net" title="Python之禅" target="_blank">Python之禅</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://python-web-guide.readthedocs.io/zh/latest/index.html" title="Python入坑指南" target="_blank">Python入坑指南</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb" title="Echo李金" target="_blank">Echo李金</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.linuxhub.org/share/python_flask_res.html" title="Flask资源" target="_blank">Flask资源</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/benbendemo/interview_python" title="Python面试题" target="_blank">Python面试题</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/521xueweihan/HelloGitHub" title="HelloGitHub" target="_blank">HelloGitHub</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境准备"><span class="nav-number">1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#技术要点"><span class="nav-number">2.</span> <span class="nav-text">技术要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行结果"><span class="nav-number">4.</span> <span class="nav-text">执行结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <!-- change icon to love on 2018/05/04
+    <i class="fa fa-user"></i>
+    -->
+    <i class="fa fa-heart"></i>
+
+  </span>
+  <span class="author" itemprop="copyrightHolder">大西洋暖流</span>
+  
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">93.5k</span>
+  
+</div>
+
+
+
+<!--
+  comment by benbendemo on 2019/01/11
+  <div class="powered-by">
+  Powered By <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>
+  </div>
+-->
+
+  <div style="width:auto; margin:0 auto; padding:auto 0;">
+        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+  </div>
+
+
+  	
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Y8gLw3ps66BdpCpSQVIo7izp-gzGzoHsz", "xNNF8jlpFcWA0iVnOaAaUHLw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+  <!-- Add openwrite support -->
+  <!--
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container-openwrite',
+          blogId: '17404-1571647601910-995',
+          name: '大西洋暖流',
+          qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+          keyword: 'bigbigben',
+      });
+  </script>
+  -->
+</body>
+</html>

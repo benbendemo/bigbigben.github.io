@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Python,Flask,Heroku," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习一门语言，除了熟悉语法知识之外，还需要懂一个框架，这样才具备生产力。Python生态强大在于它有众多各式各样的第三方包，有时光会Python语法解决不了问题，必须结合第三方框架协同来完成任务。 这里是我学习Flask Web开发过程中整理的笔记，我使用的资料是大名鼎鼎的“狗书”第一版和Flask官网手册。学习方法是照着“狗书”里面的内容依葫芦画瓢一步一步地边写边测。书作者Miguel Gri">
+<meta name="keywords" content="Python,Flask,Heroku">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flask学习笔记">
+<meta property="og:url" content="http://bigbigben.com/2018/02/27/learning-flask/index.html">
+<meta property="og:site_name" content="大西洋暖流">
+<meta property="og:description" content="学习一门语言，除了熟悉语法知识之外，还需要懂一个框架，这样才具备生产力。Python生态强大在于它有众多各式各样的第三方包，有时光会Python语法解决不了问题，必须结合第三方框架协同来完成任务。 这里是我学习Flask Web开发过程中整理的笔记，我使用的资料是大名鼎鼎的“狗书”第一版和Flask官网手册。学习方法是照着“狗书”里面的内容依葫芦画瓢一步一步地边写边测。书作者Miguel Gri">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bigbigben.com/2018/02/27/learning-flask/logo-full.png">
+<meta property="og:image" content="http://bigbigben.com/2018/02/27/learning-flask/cover-of-flask-web-development.png">
+<meta property="og:image" content="http://bigbigben.com/2018/02/27/learning-flask/Jietu20180227-172832@2x.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/02/27/learning-flask/Jietu20180227-173238@2x.jpg">
+<meta property="og:image" content="http://bigbigben.com/2018/02/27/learning-flask/Jietu20180305-144815@2x.jpg">
+<meta property="og:updated_time" content="2020-09-12T06:04:21.703Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flask学习笔记">
+<meta name="twitter:description" content="学习一门语言，除了熟悉语法知识之外，还需要懂一个框架，这样才具备生产力。Python生态强大在于它有众多各式各样的第三方包，有时光会Python语法解决不了问题，必须结合第三方框架协同来完成任务。 这里是我学习Flask Web开发过程中整理的笔记，我使用的资料是大名鼎鼎的“狗书”第一版和Flask官网手册。学习方法是照着“狗书”里面的内容依葫芦画瓢一步一步地边写边测。书作者Miguel Gri">
+<meta name="twitter:image" content="http://bigbigben.com/2018/02/27/learning-flask/logo-full.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bigbigben.com/2018/02/27/learning-flask/"/>
+
+
+
+
+
+  <title>Flask学习笔记 | 大西洋暖流</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <!-- add github ribbon on 2018/05/04 -->
+    <a href="https://github.com/benbendemo" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    </style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大西洋暖流</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一切都在不完美中前行</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!-- <div id="container-openwrite"> -->
+              
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/02/27/learning-flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Flask学习笔记</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-27T11:01:56+08:00">
+                2018-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/27/learning-flask/" class="leancloud_visitors" data-flag-title="Flask学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,590
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  18
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div id="container-openwrite">
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/02/27/learning-flask/logo-full.png" alt="Flask Logo"></p>
+<p>学习一门语言，除了熟悉语法知识之外，还需要懂一个框架，这样才具备生产力。Python生态强大在于它有众多各式各样的第三方包，有时光会Python语法解决不了问题，必须结合第三方框架协同来完成任务。</p>
+<p>这里是我学习Flask Web开发过程中整理的笔记，我使用的资料是大名鼎鼎的“狗书”第一版和Flask官网手册。学习方法是照着“狗书”里面的内容依葫芦画瓢一步一步地边写边测。书作者<a href="https://flaskbook.com" target="_blank" rel="external">Miguel Grinberg</a>的网站上有最新版的内容，想获取第二版或视频教程可以移步观看。</p>
+<p><img src="/2018/02/27/learning-flask/cover-of-flask-web-development.png" alt="cover of flask web development"></p>
+<p>这篇博文纪录学习过程中遇到的重点和难点，前后没有相关性，属于看到哪儿写到哪儿那种，大部分是摘抄，有个人思考的部分是“<strong><a href="#jump1">同步发送邮件？异步发送邮件？</a></strong>” 、“<strong><a href="#jump2">数据库多对多关联关系</a></strong>” 、“<strong><a href="#jump3">部署Python Flasky程序到Heroku</a></strong>”这几节。</p>
+<p>如果读者朋友发现哪里有写得不对的地方，欢迎指正。</p>
+<h3 id="Flask网址重定向问题"><a href="#Flask网址重定向问题" class="headerlink" title="Flask网址重定向问题"></a>Flask网址重定向问题</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/projects/')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">projects</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'The project page'</span></div><div class="line"></div><div class="line"><span class="meta">@app.route('/about')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">about</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'The about page'</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	app.run(debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>这个例子中，当你在浏览器中访问<a href="http://127.0.0.1:5000/projects" target="_blank" rel="external">http://127.0.0.1:5000/projects</a> 时（注意，这个URL最后面没有跟随斜线），会自动定向到<a href="http://127.0.0.1:5000/projects/" target="_blank" rel="external">http://127.0.0.1:5000/projects/</a> 页面，访问两个页面是同一个效果。</p>
+<p>但是，当你访问<a href="http://127.0.0.1:5000/about/" target="_blank" rel="external">http://127.0.0.1:5000/about/</a> 时，会提示404报错。访问<a href="http://127.0.0.1:5000/about" target="_blank" rel="external">http://127.0.0.1:5000/about</a> 才能得到预期结果。</p>
+<p>这两个路由的本质区别，就是网址的重定向问题。第一种情况中，规范的URL指向projects尾端有一个斜线。这种感觉很像在文件系统中的文件夹。访问一个结尾不带斜线的URL会被Flask重定向到带斜线的规范URL上面。第二种情况的URL结尾不带斜线，类似UNIX-like系统下的文件的路径名。访问结尾带斜线的 URL 会产生一个“404 Not Found”错误。</p>
+<h3 id="上下文全局变量"><a href="#上下文全局变量" class="headerlink" title="上下文全局变量"></a>上下文全局变量</h3><p>客户端发送的请求对象被Flask作为参数传入到视图函数中进行处理，如果视图函数在访问请求对象外，还需要其它对象，那么会变得异常复杂。于是Flask使用上下文将一些对象变成了全局变量。</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th style="text-align:left">上下文</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_app</td>
+<td style="text-align:left">程序上下文</td>
+<td style="text-align:left">当前激活程序的程序实例</td>
+</tr>
+<tr>
+<td>g</td>
+<td style="text-align:left">程序上下文</td>
+<td style="text-align:left">处理请求时用作临时存储的对象。每次请求都会重设这个变量</td>
+</tr>
+<tr>
+<td>request</td>
+<td style="text-align:left">请求上下文</td>
+<td style="text-align:left">请求对象，封装了客户端发出的HTTP请求中的内容</td>
+</tr>
+<tr>
+<td>session</td>
+<td style="text-align:left">请求上下文</td>
+<td style="text-align:left">用户会话，用于处理请求之间需要记住的”值”的字典</td>
+</tr>
+</tbody>
+</table>
+<p>下面这个例子中，视图函数把request当作全局变量使用。要注意，这里把request用作全局变量是指在一个线程中作为全局变量使用用，不会干扰其它线程。多线程服务器中，不同线程处理不同客户端发送的不同请求时，每个线程看到的request对象必然各不不同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request</div><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></div><div class="line">	user_agent=request.headers.get(<span class="string">'User-Agent'</span>)</div><div class="line">	<span class="keyword">return</span> <span class="string">'&lt;p&gt;Your browser is %s&lt;/p&gt;'</span> % user_agent</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	app.run(debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<h3 id="URL构建函数"><a href="#URL构建函数" class="headerlink" title="URL构建函数"></a>URL构建函数</h3><p>使用url_for()这个构建函数来给视图函数构造 URL。它接受函数名作为第一个参数，接收关键字参数作为第二个参数，关键字参数对应URL规则的变量部分。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,url_for,redirect</div><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/hello')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">return</span> redirect(url_for(<span class="string">'index'</span>))</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'Index Page'</span></div><div class="line"></div><div class="line"><span class="meta">@app.route('/user/&lt;username&gt;')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_user_profile</span><span class="params">(username)</span>:</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'User %s'</span> % username</div><div class="line"></div><div class="line"><span class="meta">@app.route('/post/&lt;int:post_id&gt;')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_post</span><span class="params">(post_id)</span>:</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'Post %d'</span> % post_id</div><div class="line"></div><div class="line"><span class="meta">@app.route('/projects/')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">projects</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'The project page'</span></div><div class="line"></div><div class="line"><span class="meta">@app.route('/about')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">about</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'The about page'</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	<span class="keyword">with</span> app.test_request_context():</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'hello_world'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'index'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'show_user_profile'</span>,username=<span class="string">'jack'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'show_post'</span>,post_id=<span class="string">'1'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'projects'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'about'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'about'</span>,next=<span class="string">'/'</span>)</div><div class="line">		<span class="keyword">print</span> url_for(<span class="string">'static'</span>, filename=<span class="string">'style.css'</span>)</div><div class="line">	app.run(debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<p>查看with app.test_request_context()函数执行完的结果，如下：</p>
+<pre><code>/hello
+/
+/user/jack
+/post/1
+/projects/
+/about
+/about?next=%2F
+/static/style.css
+</code></pre><h3 id="钩子函数"><a href="#钩子函数" class="headerlink" title="钩子函数"></a>钩子函数</h3><p>有些场景下，Flask在处理请求之前或之后，需要执行特定功能的代码。比如，在请求开始前，要创建数据库连接或对发起请求的用户进行认证。为了避免每个视图函数中都使用重复的代码，Flask设计了4种钩子函数来实现这些功能。</p>
+<ul>
+<li>before_first_request : 注册一个函数，在处理第一个请求之前运行。</li>
+<li>before_request : 注册一个函数，在每次请求之前运行。</li>
+<li>after_request : 注册一个函数，如果没有未处理的异常抛出，在每次请求之后运行。</li>
+<li>teardown_request : 注册一个函数，即使有未处理的异常抛出，也在每次请求之后运行。</li>
+</ul>
+<p>钩子函数和视图函数之间共享数据一般使用上下文全局变量g。例如，before_request 处理程序可以从数据库中加载已登录用户，并将其保存到 g.user 中。随后调用视图函数时，视图函数再使用 g.user 获取用户。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sqlite3</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> g</div><div class="line"></div><div class="line">DATABASE = <span class="string">'/database.db'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect_db</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> sqlite3.connect(DATABASE)</div><div class="line"></div><div class="line"><span class="meta">@app.before_request</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">before_request</span><span class="params">()</span>:</span></div><div class="line">    g.db = connect_db()</div><div class="line"></div><div class="line"><span class="comment"># teardown_request在请求结束时运行，即使before_request运行失败或者从未运行过。</span></div><div class="line"><span class="meta">@app.teardown_request</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">teardown_request</span><span class="params">(exception)</span>:</span></div><div class="line">    <span class="keyword">if</span> hasattr(g, <span class="string">'db'</span>):</div><div class="line">        g.db.close()</div></pre></td></tr></table></figure>
+<h3 id="错误代码重定向"><a href="#错误代码重定向" class="headerlink" title="错误代码重定向"></a>错误代码重定向</h3><p>下面这个例子使用redirect和url_for()构造函数将主页(‘/’)重定向到login页面，login页面调用abort函数返回401报错。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,url_for,redirect</div><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">return</span> redirect(url_for(<span class="string">'login'</span>))</div><div class="line"></div><div class="line"><span class="meta">@app.route('/login')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></div><div class="line">	<span class="comment"># abort函数放弃请求并返回错误代码</span></div><div class="line">	<span class="comment"># 401表示禁止访问,200表示一切正常,404表示页面不存在</span></div><div class="line">	abort(<span class="number">401</span>)</div><div class="line"></div><div class="line"><span class="comment"># 使用errorhandler()装饰器可以定制错误页面，下面定制401报错信息，当然也可以使用render_template('page_error.html')将401报错重定向到一个页面</span></div><div class="line"><span class="comment"># page_error函数类似于视图函数，它有另外一个名称叫做错误处理器，现在当人家提到错误处理器，你能明白人家说的是什么东西了</span></div><div class="line"><span class="meta">@app.errorhandler(401)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">page_error</span><span class="params">(error)</span>:</span></div><div class="line">	<span class="comment">#return render_template('page_not_found.html'),401</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'Page occurs error,error code is 401'</span></div><div class="line">	</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	app.run(debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<p>在使用app.errorhandler(401)装饰器重定向之前，执行程序，返回“Unauthorized</p>
+<p>The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn’t understand how to supply the credentials required.”报错。</p>
+<p><img src="/2018/02/27/learning-flask/Jietu20180227-172832@2x.jpg" alt="401禁止访问"></p>
+<p>使用app.errorhandler(401)装饰器进行401报错重定向后，执行程序，返回结果变成“Page occurs error,error code is 401”。</p>
+<p><img src="/2018/02/27/learning-flask/Jietu20180227-173238@2x.jpg" alt="401报错重定向"></p>
+<h3 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h3><p>上传文件的基本工作流程如下：</p>
+<ol>
+<li>存在一个&lt;form&gt;标签，enctype值等于“multipart/form-data”，&lt;form&gt;标签里面包含&lt;input type=file&gt;标签。</li>
+<li>WSGI应用程序通过request请求上下文里面的files字典访问文件。</li>
+<li>使用文件的save()方法将文件保存到指定的目录。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">Created on Tue Feb 28 10:41:05 2018</span></div><div class="line"><span class="string">#func:测试Flask上传文件</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,url_for,redirect,request,abort,escape,session,flash</div><div class="line"><span class="keyword">from</span> werkzeug <span class="keyword">import</span> secure_filename</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> send_from_directory</div><div class="line"></div><div class="line"><span class="comment"># UPLOAD_FOLDER存储上传文件的地方,必须写全路径,使用相对路径然后在file.save操作那里进行路径拼接不成功</span></div><div class="line">UPLOAD_FOLDER  = <span class="string">'/Users/jacksonshawn/PythonCodes/pythonlearning/flask2/upload'</span></div><div class="line"></div><div class="line"><span class="comment"># 允许上传文件类型的集合</span></div><div class="line">ALLOWED_EXTENSIONS = set([<span class="string">'txt'</span>,<span class="string">'pdf'</span>,<span class="string">'png'</span>,<span class="string">'jpg'</span>,<span class="string">'jpeg'</span>,<span class="string">'gif'</span>,<span class="string">'html'</span>,<span class="string">'csv'</span>])</div><div class="line"></div><div class="line">app = Flask(__name__)</div><div class="line"><span class="comment"># 配置上传文件目录</span></div><div class="line">app.config[<span class="string">'UPLOAD_FOLDER'</span>] = UPLOAD_FOLDER</div><div class="line"><span class="comment"># 生成一个随机的密钥</span></div><div class="line">app.secret_key = os.urandom(<span class="number">24</span>)</div><div class="line"><span class="comment"># 涉资上传文件限制为最大16M</span></div><div class="line">app.config[<span class="string">'MAX_CONTENT_LENGTH'</span>] = <span class="number">16</span> * <span class="number">1024</span> * <span class="number">1024</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">allowed_file</span><span class="params">(filename)</span>:</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'.'</span> <span class="keyword">in</span> filename <span class="keyword">and</span> filename.rsplit(<span class="string">'.'</span>,<span class="number">1</span>)[<span class="number">1</span>] <span class="keyword">in</span> ALLOWED_EXTENSIONS</div><div class="line"></div><div class="line"><span class="meta">@app.route('/',methods=['GET','POST'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload_file</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</div><div class="line">		file = request.files[<span class="string">'file'</span>]</div><div class="line">		<span class="keyword">if</span> file <span class="keyword">and</span> allowed_file(file.filename):</div><div class="line">			filename = secure_filename(file.filename)</div><div class="line">			<span class="comment">#print "filename is:",filename</span></div><div class="line">			<span class="comment">#print "cwd is:",os.getcwd()</span></div><div class="line">			<span class="comment">#print "file path:",os.path.join(app.root_path,app.config['UPLOAD_FOLDER'],filename)</span></div><div class="line">			<span class="comment">#print "path __file__:",os.path.dirname('__file__')</span></div><div class="line">			file.save(os.path.join(app.config[<span class="string">'UPLOAD_FOLDER'</span>],filename))</div><div class="line">			<span class="keyword">return</span> redirect(url_for(<span class="string">'uploaded_file'</span>,filename=filename))</div><div class="line">		<span class="keyword">else</span>:</div><div class="line">			<span class="keyword">return</span> <span class="string">"file type not allowed"</span></div><div class="line">	<span class="keyword">return</span> <span class="string">'''</span></div><div class="line"><span class="string">	&lt;!doctype html&gt;</span></div><div class="line"><span class="string">	&lt;title&gt;Upload new File&lt;/title&gt;</span></div><div class="line"><span class="string">	&lt;h1&gt;Upload new file&lt;/h1&gt;</span></div><div class="line"><span class="string">	&lt;form action="" method=post enctype=multipart/form-data&gt;</span></div><div class="line"><span class="string">		&lt;p&gt;</span></div><div class="line"><span class="string">			&lt;input type=file name=file&gt;</span></div><div class="line"><span class="string">			&lt;input type=submit value=upload&gt;</span></div><div class="line"><span class="string">		&lt;/p&gt;</span></div><div class="line"><span class="string">	&lt;/form&gt;</span></div><div class="line"><span class="string">	'''</span></div><div class="line"></div><div class="line"><span class="meta">@app.route('/upload/&lt;filename&gt;')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">uploaded_file</span><span class="params">(filename)</span>:</span></div><div class="line">	<span class="comment"># send_from_directory将上传的文件读取到浏览器中显示，如果设置as_attachment为True，则该文件会在浏览器中自动下载</span></div><div class="line">	<span class="keyword">return</span> send_from_directory(app.config[<span class="string">'UPLOAD_FOLDER'</span>],filename)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	app.run(debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<h3 id="Flask-SQLAlchemy数据类型"><a href="#Flask-SQLAlchemy数据类型" class="headerlink" title="Flask-SQLAlchemy数据类型"></a>Flask-SQLAlchemy数据类型</h3><p>SQLAlchemy这个ORM框架将面向对象操作转换为底层的数据库指令。我们不需要去管底层如何实现这种转换（当然，如果有兴趣学习一下Python的元类，弄懂底层实现机制也不是特别难的事），只需要将重点放在如何实现类的定义以及方法的调用上即可。</p>
+<p>下面是SQLAlschemy常用的数据类型。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">类型名</th>
+<th>Python类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Integer</td>
+<td>int</td>
+<td>普通整数，一般是32位</td>
+</tr>
+<tr>
+<td style="text-align:left">SmallInteger</td>
+<td>int</td>
+<td>取值范围小的整数，一般是16位</td>
+</tr>
+<tr>
+<td style="text-align:left">BigInteger</td>
+<td>int或long</td>
+<td>不限制精度的整数</td>
+</tr>
+<tr>
+<td style="text-align:left">Float</td>
+<td>float</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td style="text-align:left">Numeric</td>
+<td>decimal.Decimal</td>
+<td>定点数</td>
+</tr>
+<tr>
+<td style="text-align:left">String</td>
+<td>str</td>
+<td>变长字符串</td>
+</tr>
+<tr>
+<td style="text-align:left">Text</td>
+<td>str</td>
+<td>变长字符串，对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td style="text-align:left">Unicode</td>
+<td>unicode</td>
+<td>变长Unicode字符串</td>
+</tr>
+<tr>
+<td style="text-align:left">UnicodeText</td>
+<td>unicode</td>
+<td>变长Unicode字符串，对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td style="text-align:left">Boolean</td>
+<td>bool</td>
+<td>布尔值</td>
+</tr>
+<tr>
+<td style="text-align:left">Date</td>
+<td>datetime.date</td>
+<td>日期</td>
+</tr>
+<tr>
+<td style="text-align:left">Time</td>
+<td>datetime.time</td>
+<td>时间</td>
+</tr>
+<tr>
+<td style="text-align:left">DateTime</td>
+<td>datetime.datetime</td>
+<td>日期和时间</td>
+</tr>
+<tr>
+<td style="text-align:left">Interval</td>
+<td>datetime.timedelta</td>
+<td>时间间隔</td>
+</tr>
+<tr>
+<td style="text-align:left">Enum</td>
+<td>str</td>
+<td>一组字符串</td>
+</tr>
+<tr>
+<td style="text-align:left">PickleType</td>
+<td>任何Python对象</td>
+<td>自动使用Pickle序列号</td>
+</tr>
+<tr>
+<td style="text-align:left">LargeBinary</td>
+<td>str</td>
+<td>二进制文件</td>
+</tr>
+</tbody>
+</table>
+<p>下面是SQLAlchemy常用列选项。</p>
+<table>
+<thead>
+<tr>
+<th>选项名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>primary_key</td>
+<td>如果设为True，这列就是表的主键</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>如果设为True，这列不允许出现重复的值</td>
+</tr>
+<tr>
+<td>index</td>
+<td>如果设为True，为这列创建索引，提升查询效率</td>
+</tr>
+<tr>
+<td>nullable</td>
+<td>如果设为True，这列允许使用空值；如果设为False，这列不允许使用空值</td>
+</tr>
+<tr>
+<td>default</td>
+<td>为这列定义默认值</td>
+</tr>
+</tbody>
+</table>
+<p>下面是SQLAlchemy常用关系选项。</p>
+<table>
+<thead>
+<tr>
+<th>选项名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>backref</td>
+<td>在关系的另一个模型中添加反向引用</td>
+</tr>
+<tr>
+<td>primaryjoin</td>
+<td>明确指定两个模型之间使用的联结条件。只在模棱两可的关系中需要指定</td>
+</tr>
+<tr>
+<td>lazy</td>
+<td>指定如何加载相关记录。可选值有select(首次访问时按需加载)、                                                                                     immediate(源对象加载后就加载)、joined(加载记录，但使用联结)、subquery(立即加载，但使用子查询)、noload(永不加载)和 dynamic(不加载记录，但提供加载记录的查询)</td>
+</tr>
+<tr>
+<td>uselist</td>
+<td>如果设为False，不使用列表，而使用标量值</td>
+</tr>
+<tr>
+<td>order_by</td>
+<td>指定关系中记录的排序方式</td>
+</tr>
+<tr>
+<td>secondary</td>
+<td>指定多对多关系中关系表的名字</td>
+</tr>
+<tr>
+<td>secondaryjoin</td>
+<td>SQLAlchemy无法自行决定时，指定多对多关系中的二级联结条件</td>
+</tr>
+</tbody>
+</table>
+<p>下面是SQLAlchemy的查询过滤器。</p>
+<table>
+<thead>
+<tr>
+<th>过滤器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>filter()</td>
+<td>把过滤器添加到原查询上，返回一个新查询</td>
+</tr>
+<tr>
+<td>filter_by()</td>
+<td>把等值过滤器添加到原查询上，返回一个新查询</td>
+</tr>
+<tr>
+<td>limit()</td>
+<td>使用指定的值限制原查询返回的结果数量，返回一个新查询</td>
+</tr>
+<tr>
+<td>offset()</td>
+<td>偏移原查询返回的结果，返回一个新查询</td>
+</tr>
+<tr>
+<td>order_by()</td>
+<td>根据指定条件对原查询结果进行排序，返回一个新查询</td>
+</tr>
+<tr>
+<td>group_by()</td>
+<td>根据指定条件对原查询结果进行分组，返回一个新查询</td>
+</tr>
+</tbody>
+</table>
+<p>下面是SQLAlchemy查询执行函数。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>all()</td>
+<td>以列表形式返回查询的所有结果</td>
+</tr>
+<tr>
+<td>first()</td>
+<td>返回查询的第一个结果，如果没有结果，则返回None</td>
+</tr>
+<tr>
+<td>first_or_404()</td>
+<td>返回查询的第一个结果，如果没有结果，则终止请求，返回404错误响应</td>
+</tr>
+<tr>
+<td>get()</td>
+<td>返回指定主键对应的行，如果没有对应的行，则返回None</td>
+</tr>
+<tr>
+<td>get_or_404()</td>
+<td>返回指定主键对应的行，如果没找到指定的主键，则终止请求，返回404错误响应</td>
+</tr>
+<tr>
+<td>count()</td>
+<td>返回查询结果的数量</td>
+</tr>
+<tr>
+<td>paginate()</td>
+<td>返回一个Paginate对象，它包含指定范围内的结果</td>
+</tr>
+</tbody>
+</table>
+<p>Flask-SQLAlchemy分页对象的属性。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>items</td>
+<td>当前页面中的记录</td>
+</tr>
+<tr>
+<td>query</td>
+<td>分页的源查询</td>
+</tr>
+<tr>
+<td>page</td>
+<td>当前页数</td>
+</tr>
+<tr>
+<td>prev_num</td>
+<td>上一页的页数</td>
+</tr>
+<tr>
+<td>next_num</td>
+<td>下一页的页数</td>
+</tr>
+<tr>
+<td>has_next</td>
+<td>如果有下一页，返回True</td>
+</tr>
+<tr>
+<td>has_prev</td>
+<td>如果有上一页，返回True</td>
+</tr>
+<tr>
+<td>pages</td>
+<td>查询得到的总页数</td>
+</tr>
+<tr>
+<td>per_page</td>
+<td>每页显示的记录数量</td>
+</tr>
+<tr>
+<td>total</td>
+<td>查询返回的记录总数</td>
+</tr>
+</tbody>
+</table>
+<p>Flask-SQLAlchemy对象上可调用的方法。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2)</td>
+<td>一个迭代器，返回一个在分页导航中显示的页数列表。这个列表的最左边显示 left_edge 页，当前页的左边显示 left_current 页，当前页的右边显示 right_current 页，最右边显示right_edge页。例如，在一个100页的列表中，当前页为第50页，使用默认配置，这个方法会返回以下页数：1、2、None、48、49、50、51、52、53、None、99、100。（None表示页数之间的间隔）</td>
+</tr>
+<tr>
+<td>prev()</td>
+<td>上一页的分页对象</td>
+</tr>
+<tr>
+<td>next()</td>
+<td>下一页的分页对象</td>
+</tr>
+</tbody>
+</table>
+<p>常用数据类型、常用列选项、常用关系选项在定义数据模型时使用，查询过滤器在shell里查询数据使用，需要结合具体例子才容易理解。</p>
+<h3 id="同步发送邮件？异步发送邮件？"><a href="#同步发送邮件？异步发送邮件？" class="headerlink" title="同步发送邮件？异步发送邮件？"></a><span id="jump1">同步发送邮件？异步发送邮件？</span></h3><p>今天在测试Flask-mail发送邮件功能时，遇到很多次554错误。我使用的是网易邮箱，根据<a href="http://help.163.com/09/1224/17/5RAJ4LMH00753VB8.html" target="_blank" rel="external">网易邮箱报错信息</a>查到我所遇到的“554 DT:SPM”报错信息是<u><em>“<strong>554 DT:SPM 发送的邮件内容包含了未被许可的信息，或被系统识别为垃圾邮件。请检查是否有用户发送病毒或者垃圾邮件；</strong>”</em></u></p>
+<p>收发邮件的程序我之前写过，对我来说不是问题，但这个554还是卡了我半天，最后查到是<strong>邮件主题</strong>和<strong>正文内容</strong>不符合网易的安全规范，再将邮件主题和正文内容做出调整之后，邮件发送成功。</p>
+<p>当然，我写在HTML文件里的正文内容，被网易把HTML语法信息全部过滤掉，只保留纯文本形式，然后才发送了出去。</p>
+<p>另外，有一点值得说的是，我是通过Flask应用发送邮件，在浏览器网页里面点击按钮，后台程序才去执行SMTP发送邮件操作。没有采用异步方式时，发送时页面出现停滞，等发送完毕，浏览器才恢复正常，这个估计就是<strong>同步阻塞</strong>吧；采用异步方式发送时，感觉操作很畅快，点击发送后，只用了一小会儿，浏览器就恢复正常。</p>
+<h3 id="Flask-Login管理用户认证状态"><a href="#Flask-Login管理用户认证状态" class="headerlink" title="Flask-Login管理用户认证状态"></a>Flask-Login管理用户认证状态</h3><p>Flask-Login实现的用户方法如下。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>is_authenticated()</td>
+<td>如果用户已经登录，必须返回 True，否则返回 False。</td>
+</tr>
+<tr>
+<td>is_active()</td>
+<td>如果允许用户登录，必须返回 True，否则返回 False。如果要禁用账户，可以返回 False。</td>
+</tr>
+<tr>
+<td>is_anonymous()</td>
+<td>对普通用户必须返回 False。</td>
+</tr>
+<tr>
+<td>get_id()</td>
+<td>必须返回用户的唯一标识符，使用 Unicode 编码字符串。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数据库多对多关联关系"><a href="#数据库多对多关联关系" class="headerlink" title="数据库多对多关联关系"></a><span id="jump2">数据库多对多关联关系</span></h3><p>今天在看《Flask Web开发》第12章讲解数据库表与表之间关联关系的时候，意外收获一种新的思维模式，它讲解的是表与表之间多对多关系，记录于此。</p>
+<p>数据库设计中，我们比较好理解的是“<strong>一对一</strong>”（A表中一条记录对应B表中一个记录，比如，社交网站中一个用户对应角色表中的一个角色）和“<strong>一对多</strong>”（A表中一条记录对应B表中一组记录，比如，社交网站中一个用户对应文章表中发布的全部文章）。“<strong>多对一</strong>”和“<strong>一对多</strong>”是同一个关系，只是“多”的角度不一样。另外，可以将“<strong>一对一</strong>”看成是简化版的“<strong>一对多</strong>”关系，它限制了“多”的这一侧只能有一条记录。</p>
+<p>这三种关系，都有一侧是单个实体，记录之间的联系通过外键实现，让外键指向这个实体，创建表时好操作。</p>
+<p>那“<strong>多对多</strong>”（比如学生表和课程表，N个学生可以选同一套课程，N套课程可以被同一个学生选）这种关联关系，设计表结构时候如何处理呢？</p>
+<p>书中给出的思路是，添加第三张表，称之为关联表，用它作为桥梁，将“<strong>多对多</strong>”关系分解成两个“<strong>一对多</strong>”关系。</p>
+<p><img src="/2018/02/27/learning-flask/Jietu20180305-144815@2x.jpg" alt="学生表和课程表关联关系"></p>
+<p>（学生表和课程表通过注册表进行关联）</p>
+<p>registrations表中，每一行都表示一个学生注册一个课程的记录。要想知道一个学生选择了哪些课程，先要从学生表和registrations表之间的一对多关系开始，获取这个学生在registrations表中的全部记录，然后通过registrations表和课程表之间的多对一关系，就可以查出该学生注册的全部课程。</p>
+<p>要想知道一门课程有哪些学生注册过，从课程表和registrations表之间的一对多关系开始，获取这门课程在registrations表中的全部记录，然后通过registrations表和学生表之间的多对一关系，就可以查出这门课程有哪些同学注册。</p>
+<p>不知道还有没有别的思路，我觉得这个模式分解的思路非常赞。</p>
+<h3 id="部署Python-Flasky程序到Heroku"><a href="#部署Python-Flasky程序到Heroku" class="headerlink" title="部署Python Flasky程序到Heroku"></a><span id="jump3">部署Python Flasky程序到Heroku</span></h3><p>按照Flask web开发书中的步骤一步一步看到最后，成功被作者绕晕，照着书中的步骤写下来，项目代码和文档已变得非常混乱。最后几章里的精华依然很多，不过，我最感兴趣的是如何把整个项目部署到Heroku。</p>
+<p>由于以前没有接触过这些，发布项目上线对我来说并不是一件容易的事。没玩过的东西，我都有兴趣尝试一下，于是直接Clone一份原作者的代码，花费了一整天的时间终于成功把它部署到Heroku上面。在部署过程中，遇到了很多问题，在前人的基础上， 我把我操作步骤都记录了下来，说不定会对其它朋友有帮助。</p>
+<p>请移步<a href="/2018/03/09/deploy-flaskapp-onto-heroku/">部署Python Flasky程序到Heroku</a>查看。</p>
+
+      
+    </div>
+    </div>
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/about/qrcode_for_dxy-nuanliu.jpg" alt="大西洋暖流 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎订阅大西洋暖流</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    大西洋暖流
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://bigbigben.com/2018/02/27/learning-flask/" title="Flask学习笔记">http://bigbigben.com/2018/02/27/learning-flask/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Flask/" rel="tag"><i class="fa fa-tag"></i> Flask</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Heroku/" rel="tag"><i class="fa fa-tag"></i> Heroku</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/24/mhxy-game-account-sold/" rel="next" title="我把梦幻西游游戏帐号卖掉了!">
+                <i class="fa fa-chevron-left"></i> 我把梦幻西游游戏帐号卖掉了!
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/09/deploy-flaskapp-onto-heroku/" rel="prev" title="部署Python Flasky项目到Heroku">
+                部署Python Flasky项目到Heroku <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            <!-- </div> -->
+          </div>
+            
+
+
+            
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="大西洋暖流" />
+            
+              <p class="site-author-name" itemprop="name">大西洋暖流</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/benbendemo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/benbendemo" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/benbendemo" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/links/" target="_blank" title="Links">
+                    
+                      <i class="fa fa-fw fa-link"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                常用链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="王垠" target="_blank">王垠</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://foofish.net" title="Python之禅" target="_blank">Python之禅</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://python-web-guide.readthedocs.io/zh/latest/index.html" title="Python入坑指南" target="_blank">Python入坑指南</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb" title="Echo李金" target="_blank">Echo李金</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.linuxhub.org/share/python_flask_res.html" title="Flask资源" target="_blank">Flask资源</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/benbendemo/interview_python" title="Python面试题" target="_blank">Python面试题</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/521xueweihan/HelloGitHub" title="HelloGitHub" target="_blank">HelloGitHub</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Flask网址重定向问题"><span class="nav-number">1.</span> <span class="nav-text">Flask网址重定向问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文全局变量"><span class="nav-number">2.</span> <span class="nav-text">上下文全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL构建函数"><span class="nav-number">3.</span> <span class="nav-text">URL构建函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#钩子函数"><span class="nav-number">4.</span> <span class="nav-text">钩子函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误代码重定向"><span class="nav-number">5.</span> <span class="nav-text">错误代码重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传文件"><span class="nav-number">6.</span> <span class="nav-text">上传文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flask-SQLAlchemy数据类型"><span class="nav-number">7.</span> <span class="nav-text">Flask-SQLAlchemy数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步发送邮件？异步发送邮件？"><span class="nav-number">8.</span> <span class="nav-text">同步发送邮件？异步发送邮件？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flask-Login管理用户认证状态"><span class="nav-number">9.</span> <span class="nav-text">Flask-Login管理用户认证状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库多对多关联关系"><span class="nav-number">10.</span> <span class="nav-text">数据库多对多关联关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署Python-Flasky程序到Heroku"><span class="nav-number">11.</span> <span class="nav-text">部署Python Flasky程序到Heroku</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <!-- change icon to love on 2018/05/04
+    <i class="fa fa-user"></i>
+    -->
+    <i class="fa fa-heart"></i>
+
+  </span>
+  <span class="author" itemprop="copyrightHolder">大西洋暖流</span>
+  
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">93.5k</span>
+  
+</div>
+
+
+
+<!--
+  comment by benbendemo on 2019/01/11
+  <div class="powered-by">
+  Powered By <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>
+  </div>
+-->
+
+  <div style="width:auto; margin:0 auto; padding:auto 0;">
+        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+  </div>
+
+
+  	
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Y8gLw3ps66BdpCpSQVIo7izp-gzGzoHsz", "xNNF8jlpFcWA0iVnOaAaUHLw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+  <!-- Add openwrite support -->
+  <!--
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container-openwrite',
+          blogId: '17404-1571647601910-995',
+          name: '大西洋暖流',
+          qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+          keyword: 'bigbigben',
+      });
+  </script>
+  -->
+</body>
+</html>

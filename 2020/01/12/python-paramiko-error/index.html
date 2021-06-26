@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Python,Airflow,paramiko,sftp," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Airflow pipeline作业流遇到这样一个问题：使用paramiko下载小文件成功，下载大文件出现Server connection dropped报错。  问题描述 下图可以看到aml_dwn_native_gz、aml_dwn_deleted_daily、aml_dwn_premium_daily三个作业执行成功，但aml_dwn_premium_fullsize_gz出现报错。">
+<meta name="keywords" content="Python,Airflow,paramiko,sftp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python paramiko下载大文件报错">
+<meta property="og:url" content="http://bigbigben.com/2020/01/12/python-paramiko-error/index.html">
+<meta property="og:site_name" content="大西洋暖流">
+<meta property="og:description" content="Airflow pipeline作业流遇到这样一个问题：使用paramiko下载小文件成功，下载大文件出现Server connection dropped报错。  问题描述 下图可以看到aml_dwn_native_gz、aml_dwn_deleted_daily、aml_dwn_premium_daily三个作业执行成功，但aml_dwn_premium_fullsize_gz出现报错。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bigbigben.com/2020/01/12/python-paramiko-error/airflow-paramiko-task-error.jpg">
+<meta property="og:updated_time" content="2020-09-12T06:04:21.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python paramiko下载大文件报错">
+<meta name="twitter:description" content="Airflow pipeline作业流遇到这样一个问题：使用paramiko下载小文件成功，下载大文件出现Server connection dropped报错。  问题描述 下图可以看到aml_dwn_native_gz、aml_dwn_deleted_daily、aml_dwn_premium_daily三个作业执行成功，但aml_dwn_premium_fullsize_gz出现报错。">
+<meta name="twitter:image" content="http://bigbigben.com/2020/01/12/python-paramiko-error/airflow-paramiko-task-error.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bigbigben.com/2020/01/12/python-paramiko-error/"/>
+
+
+
+
+
+  <title>Python paramiko下载大文件报错 | 大西洋暖流</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <!-- add github ribbon on 2018/05/04 -->
+    <a href="https://github.com/benbendemo" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    </style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大西洋暖流</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一切都在不完美中前行</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!-- <div id="container-openwrite"> -->
+              
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2020/01/12/python-paramiko-error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Python paramiko下载大文件报错</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-12T12:26:40+08:00">
+                2020-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/01/12/python-paramiko-error/" class="leancloud_visitors" data-flag-title="Python paramiko下载大文件报错">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,279
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div id="container-openwrite">
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Airflow pipeline作业流遇到这样一个问题：使用paramiko下载小文件成功，下载大文件出现<code>Server connection dropped</code>报错。</p>
+<hr>
+<p><strong>问题描述</strong></p>
+<p>下图可以看到<code>aml_dwn_native_gz</code>、<code>aml_dwn_deleted_daily</code>、<code>aml_dwn_premium_daily</code>三个作业执行成功，但<code>aml_dwn_premium_fullsize_gz</code>出现报错。</p>
+<p><img src="/2020/01/12/python-paramiko-error/airflow-paramiko-task-error.jpg" alt=""></p>
+<a id="more"></a>
+<p>四个下载作业均使用<code>ShortCircuitOperator</code>，代码块如下所示，唯一不同的是传入的参数<code>filename1</code>和<code>filename2</code>在k8s配置文件中对应的文件名不同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Airflow premium fullsize process</span></div><div class="line">aml_dwn_premium_fullsize_gz = ShortCircuitOperator(</div><div class="line">    task_id=<span class="string">'aml_dwn_premium_fullsize_gz'</span>,</div><div class="line">    provide_context=<span class="keyword">True</span>,</div><div class="line">    python_callable=load_function(<span class="string">'worldcheck_file_downloader.aml_download_files.\</span></div><div class="line"><span class="string">                                    aml_download_files'</span>,<span class="string">'aml_download_files'</span>),</div><div class="line">    executor_config=&#123;</div><div class="line">            <span class="string">'KubernetesExecutor'</span>: &#123;</div><div class="line">                <span class="string">'image'</span>: <span class="string">'|| getenv "IMAGE_AIRFLOW" ||'</span>,</div><div class="line">                <span class="string">"volumes"</span>: [</div><div class="line">                    &#123;</div><div class="line">                        <span class="string">"name"</span>: <span class="string">"airflow-download"</span>,</div><div class="line">                        <span class="string">"persistentVolumeClaim"</span>: &#123;</div><div class="line">                            <span class="string">"claimName"</span>: <span class="string">'|| getenv "TASKS_PVC" ||'</span></div><div class="line">                        &#125;</div><div class="line">                    &#125;,</div><div class="line">                ],</div><div class="line">                <span class="string">"volume_mounts"</span>: [</div><div class="line">                    &#123;</div><div class="line">                        <span class="string">"mountPath"</span>: <span class="string">'|| getenv "VOLUME_MOUNT_PATH" ||'</span>,</div><div class="line">                        <span class="string">"name"</span>: <span class="string">'airflow-download'</span>,</div><div class="line">                    &#125;,</div><div class="line">                ]</div><div class="line">            &#125;,</div><div class="line">        &#125;,</div><div class="line">    op_kwargs=&#123;<span class="string">'sftphost'</span>: <span class="string">'|| getenv "SFTP_HOST" ||'</span>,</div><div class="line">               <span class="string">'sftpport'</span>: <span class="string">'|| getenv "SFTP_PORT" ||'</span>,</div><div class="line">               <span class="string">'sftpremotepath1'</span>: <span class="string">'|| getenv "SFTP_REMOTEPATH1" ||'</span>,</div><div class="line">               <span class="string">'sftpremotepath2'</span>: <span class="string">'|| getenv "SFTP_REMOTEPATH2" ||'</span>,</div><div class="line">               <span class="string">'sftpusername'</span>: <span class="string">'|| getenv "SFTP_USERNAME" ||'</span>,</div><div class="line">               <span class="string">'sftppassword'</span>: <span class="string">'|| getenv "SFTP_PASSWORD" ||'</span>,</div><div class="line">               <span class="string">'worldcheck_download_basedir'</span>: <span class="string">'|| getenv "DOWNLOAD_BASEDIR" ||'</span>,</div><div class="line">               <span class="string">'filename1'</span>: <span class="string">'|| getenv "PREMIUM_FULLSIZE_GZ" ||'</span>,</div><div class="line">               <span class="string">'filename2'</span>: <span class="string">'|| getenv "PREMIUM_FULLSIZE_GZ_MD5" ||'</span>&#125;,</div><div class="line">    email_on_failure=<span class="keyword">True</span>,</div><div class="line">    email=<span class="string">'|| getenv "AIRFLOW_EMAIL_LIST" ||'</span>,</div><div class="line">    dag=dag)</div></pre></td></tr></table></figure>
+<hr>
+<p><strong>日志分析</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">27</span>,<span class="number">906</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">27</span>,<span class="number">906</span>] &#123;transport<span class="variable">.py</span>:<span class="number">1819</span>&#125; INFO - Connected (version <span class="number">2</span><span class="variable">.0</span>, client Twisted)</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">28</span>,<span class="number">182</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">28</span>,<span class="number">182</span>] &#123;local_task_job<span class="variable">.py</span>:<span class="number">124</span>&#125; WARNING - Time since last heartbeat(<span class="number">0</span><span class="variable">.07</span> s) &lt; heartrate(<span class="number">5</span><span class="variable">.0</span> s), sleeping <span class="keyword">for</span> <span class="number">4</span><span class="variable">.928218</span> s</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">29</span>,<span class="number">824</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">29</span>,<span class="number">824</span>] &#123;transport<span class="variable">.py</span>:<span class="number">1819</span>&#125; INFO - Authentication (password) successful!</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">29</span>,<span class="number">996</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">29</span>,<span class="number">995</span>] &#123;sftp<span class="variable">.py</span>:<span class="number">158</span>&#125; INFO - [chan <span class="number">0</span>] Opened sftp connection (server version <span class="number">3</span>)</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">30</span>,<span class="number">839</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - ftpclient<span class="variable">.py</span> sftp_get filename_fullpath: &lt;<span class="keyword">class</span> 'str'&gt; /<span class="keyword">var</span>/data/k8s/download/<span class="number">202001</span>/daily_check<span class="variable">.csv</span><span class="variable">.gz</span></div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">33</span>,<span class="number">280</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">08</span>:<span class="number">33</span>,<span class="number">279</span>] &#123;local_task_job<span class="variable">.py</span>:<span class="number">124</span>&#125; WARNING - Time since last heartbeat(<span class="number">0</span><span class="variable">.06</span> s) &lt; heartrate(<span class="number">5</span><span class="variable">.0</span> s), sleeping <span class="keyword">for</span> <span class="number">4</span><span class="variable">.938538</span> s</div><div class="line">......</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">38</span>,<span class="number">638</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">38</span>,<span class="number">637</span>] &#123;local_task_job<span class="variable">.py</span>:<span class="number">124</span>&#125; WARNING - Time since last heartbeat(<span class="number">0</span><span class="variable">.07</span> s) &lt; heartrate(<span class="number">5</span><span class="variable">.0</span> s), sleeping <span class="keyword">for</span> <span class="number">4</span><span class="variable">.927038</span> s</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">907</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; WARNING - <span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">906</span> - <span class="number">10</span> -    ERROR -  <span class="number">184</span> - sftp_get:sftp_get downloader<span class="variable">.csv</span><span class="variable">.gz</span> error:sftp_get filename_fullpath /<span class="keyword">var</span>/data/k8s/download/<span class="number">202001</span>/daily_check<span class="variable">.csv</span><span class="variable">.gz</span> error:&lt;<span class="keyword">class</span> 'paramiko<span class="variable">.ssh_exception</span><span class="variable">.SSHException</span>'&gt;:Server connection dropped:</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">918</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; INFO - [<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">906</span>] &#123;ftpclient<span class="variable">.py</span>:<span class="number">184</span>&#125; ERROR - sftp_get:sftp_get downloader<span class="variable">.csv</span><span class="variable">.gz</span> error:sftp_get filename_fullpath /<span class="keyword">var</span>/data/k8s/download/<span class="number">202001</span>/daily_check<span class="variable">.csv</span><span class="variable">.gz</span> error:&lt;<span class="keyword">class</span> 'paramiko<span class="variable">.ssh_exception</span><span class="variable">.SSHException</span>'&gt;:Server connection dropped:</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">921</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; WARNING - --- Logging error ---</div><div class="line">[<span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">911</span>] &#123;logging_mixin<span class="variable">.py</span>:<span class="number">112</span>&#125; WARNING - <span class="number">2020</span>-<span class="number">01</span>-<span class="number">10</span> <span class="number">03</span>:<span class="number">29</span>:<span class="number">41</span>,<span class="number">906</span> - <span class="number">10</span> -    ERROR -  <span class="number">184</span> - sftp_get:sftp_get downloader<span class="variable">.csv</span><span class="variable">.gz</span> error:sftp_get filename_fullpath /<span class="keyword">var</span>/data/k8s/download/<span class="number">202001</span>/daily_check<span class="variable">.csv</span><span class="variable">.gz</span> error:&lt;<span class="keyword">class</span> 'paramiko<span class="variable">.ssh_exception</span><span class="variable">.SSHException</span>'&gt;:Server connection dropped:</div><div class="line">Exception in thread Thread-<span class="number">3</span>:</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"/usr/local/lib/python3.7/threading.py"</span>, line <span class="number">926</span>, in <span class="number">_</span>bootstrap_inner</div><div class="line">    self<span class="variable">.run</span>()</div><div class="line">  File <span class="string">"/usr/local/lib/python3.7/threading.py"</span>, line <span class="number">870</span>, in run</div><div class="line">    self<span class="variable">._target</span>(*self<span class="variable">._args</span>, **self<span class="variable">._kwargs</span>)</div><div class="line">  File <span class="string">"/usr/local/lib/python3.7/site-packages/paramiko/sftp_file.py"</span>, line <span class="number">538</span>, in <span class="number">_</span>prefetch_thread</div><div class="line">    self, CMD_READ, self<span class="variable">.handle</span>, long(offset), <span class="keyword">int</span>(length)</div><div class="line">  File <span class="string">"/usr/local/lib/python3.7/site-packages/paramiko/sftp_client.py"</span>, line <span class="number">837</span>, in <span class="number">_</span>async_request</div><div class="line">    self<span class="variable">._send_packet</span>(t, msg)</div><div class="line">  File <span class="string">"/usr/local/lib/python3.7/site-packages/paramiko/sftp.py"</span>, line <span class="number">198</span>, in <span class="number">_</span>send_packet</div><div class="line">    self<span class="variable">._write_all</span>(out)</div><div class="line">  File <span class="string">"/usr/local/lib/python3.7/site-packages/paramiko/sftp.py"</span>, line <span class="number">164</span>, in <span class="number">_</span>write_all</div><div class="line">    raise EOFError()</div><div class="line">EOFError</div></pre></td></tr></table></figure>
+<p>可以看到，中间有20多分钟持续输出heartbeat warning message，于是以为<code>Server connection dropped</code>报错是Airflow hearbeat warning message太多所致，其它3个paramiko download作业能够执行成功，唯有这一个因为待下载的文件size巨大（670MB），需要耗费的时间较多，Airflow打印了很多hearbeat warning message，从log日志中看到cpu time经常性地被sleep函数占用，故而无法给paramiko download作业分配执行时间。</p>
+<hr>
+<p><strong>原因排查</strong></p>
+<p>第一时间在Stack Overflow上面发帖求助。</p>
+<p>Stack Overflow求助帖：<a href="https://stackoverflow.com/questions/59676480/airflow-heartbeat-warning-log-cause-ssh-connection-dropped" target="_blank" rel="external">Airflow heartbeat warning log cause ssh connection dropped</a></p>
+<p>后来翻来覆去地看Airflow <code>local_task_job.py</code>程序源码，发现不是hearbeat warning message的问题，即使把这些warning message给disable掉，我推断情况可能还是会如此（这里因为k8s中跑的Airflow image我没有权限修改，并没有尝试）。</p>
+<p>后来搜索<code>paramiko EOFError</code>报错，发现很多人遇到了类似的问题，详细见别人在GitHub上发的这个求助帖。</p>
+<p>GitHub求助帖：<a href="https://github.com/paramiko/paramiko/issues/926" target="_blank" rel="external">SFTP: Downloading Large Files Hangs</a></p>
+<p>为什么使用paramiko下载小文件能成功，下载大文件会报错，原因目前并没有探明。</p>
+<p>我的一个推测是，paramiko创建ssh连接后，使用ssh对象实例化一个sftp对象，通过这个sftp对象去完成文件下载动作，由于large size文件下载需要耗费大量时间，ssh对象在下载过程中被Python虚拟机gc机制当作垃圾给回收掉了，这样就出现了”Server connection dropped”。</p>
+<hr>
+<p><strong>解决方法</strong></p>
+<p>最后参照GitHub上该博主的建议，使用shutil.copyfileobj替换paramiko sftp.get下载功能，测试后发现large size文件可以下载成功。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FtpClient</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Create sftp instance;then implemnet all sftp methods</span></div><div class="line"><span class="string">    """</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, sftphost, sftpport, sftpusername, sftppassword)</span>:</span></div><div class="line">        self.hostname = sftphost</div><div class="line">        self.port = sftpport</div><div class="line">        self.username = sftpusername</div><div class="line">        self.password = sftppassword</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            <span class="keyword">if</span> type(self.port) <span class="keyword">is</span> str:</div><div class="line">                self.port = int(self.port)</div><div class="line"></div><div class="line">            self.client = paramiko.Transport((self.hostname, self.port))</div><div class="line">            self.client.connect(username=self.username,</div><div class="line">                                password=self.password)</div><div class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">            logger.error(<span class="string">'%s:%s:%s:%s'</span>,</div><div class="line">                         inspect.stack()[<span class="number">0</span>][<span class="number">3</span>],</div><div class="line">                         <span class="string">'paramiko connect error'</span>,</div><div class="line">                         type(e),</div><div class="line">                         e)</div><div class="line">            self.sftp = <span class="keyword">None</span></div><div class="line">            <span class="keyword">return</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.sftp = paramiko.SFTPClient.from_transport(self.client)</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sftp_downloads</span><span class="params">(self, remote_directory, filename, filename_fullpath)</span>:</span></div><div class="line">        <span class="comment"># set server directory as pwd</span></div><div class="line">        self.sftp_chdir(remote_directory)</div><div class="line">        </div><div class="line">        <span class="comment"># 旧方法下载大文件会出现Server connection dropped</span></div><div class="line">        <span class="comment"># self.sftp.get(filename, filename_fullpath, callback=self.sftp_get_callback)</span></div><div class="line">        </div><div class="line">        <span class="comment"># 新方法下载大文件成功</span></div><div class="line">        <span class="keyword">with</span> self.sftp.open(filename, <span class="string">'rb'</span>) <span class="keyword">as</span> fp:</div><div class="line">            shutil.copyfileobj(fp, open(filename_fullpath, <span class="string">'wb'</span>))</div></pre></td></tr></table></figure>
+<p>后续有新的发现，再做更新。</p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><a href="https://github.com/paramiko/paramiko/issues/926" target="_blank" rel="external">SFTP: Downloading Large Files Hangs</a></li>
+<li><a href="https://stackoverflow.com/questions/12486623/paramiko-fails-to-download-large-files-1gb" target="_blank" rel="external">Paramiko Fails to download large files &gt;1GB</a></li>
+<li><a href="https://stackoverflow.com/questions/59676480/airflow-heartbeat-warning-log-cause-ssh-connection-dropped" target="_blank" rel="external">Airflow heartbeat warning log cause ssh connection dropped</a></li>
+</ul>
+
+      
+    </div>
+    </div>
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/about/qrcode_for_dxy-nuanliu.jpg" alt="大西洋暖流 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎订阅大西洋暖流</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    大西洋暖流
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://bigbigben.com/2020/01/12/python-paramiko-error/" title="Python paramiko下载大文件报错">http://bigbigben.com/2020/01/12/python-paramiko-error/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Airflow/" rel="tag"><i class="fa fa-tag"></i> Airflow</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/paramiko/" rel="tag"><i class="fa fa-tag"></i> paramiko</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/sftp/" rel="tag"><i class="fa fa-tag"></i> sftp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/30/the-7th-snowball-festival/" rel="next" title="2019年雪球嘉年华">
+                <i class="fa fa-chevron-left"></i> 2019年雪球嘉年华
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/19/docker-and-k8s-commands/" rel="prev" title="常用Docker和K8S命令">
+                常用Docker和K8S命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            <!-- </div> -->
+          </div>
+            
+
+
+            
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="大西洋暖流" />
+            
+              <p class="site-author-name" itemprop="name">大西洋暖流</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/benbendemo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/benbendemo" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/benbendemo" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/links/" target="_blank" title="Links">
+                    
+                      <i class="fa fa-fw fa-link"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                常用链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="王垠" target="_blank">王垠</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://foofish.net" title="Python之禅" target="_blank">Python之禅</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://python-web-guide.readthedocs.io/zh/latest/index.html" title="Python入坑指南" target="_blank">Python入坑指南</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb" title="Echo李金" target="_blank">Echo李金</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.linuxhub.org/share/python_flask_res.html" title="Flask资源" target="_blank">Flask资源</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/benbendemo/interview_python" title="Python面试题" target="_blank">Python面试题</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/521xueweihan/HelloGitHub" title="HelloGitHub" target="_blank">HelloGitHub</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <!-- change icon to love on 2018/05/04
+    <i class="fa fa-user"></i>
+    -->
+    <i class="fa fa-heart"></i>
+
+  </span>
+  <span class="author" itemprop="copyrightHolder">大西洋暖流</span>
+  
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">93.5k</span>
+  
+</div>
+
+
+
+<!--
+  comment by benbendemo on 2019/01/11
+  <div class="powered-by">
+  Powered By <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>
+  </div>
+-->
+
+  <div style="width:auto; margin:0 auto; padding:auto 0;">
+        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+  </div>
+
+
+  	
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Y8gLw3ps66BdpCpSQVIo7izp-gzGzoHsz", "xNNF8jlpFcWA0iVnOaAaUHLw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+  <!-- Add openwrite support -->
+  <!--
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container-openwrite',
+          blogId: '17404-1571647601910-995',
+          name: '大西洋暖流',
+          qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+          keyword: 'bigbigben',
+      });
+  </script>
+  -->
+</body>
+</html>

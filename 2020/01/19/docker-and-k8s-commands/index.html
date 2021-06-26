@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Docker,Airflow,Kubernetes," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇记录工作项目中经常使用的Docker和K8S命令，我所运行Docker和K8S的工作环境如下所示，大部分本文使用的命令都可以在Linux K8S和Windows10 K8S环境使用，少数命令存在预期结果不一致的地方，请自行查阅资料解决。 注意，这并不是一篇介绍Docker和K8S是什么的文章，入门课程请自行查阅官方文档学习；如果安装Docker和K8S环境也请自行查阅资料解决。">
+<meta name="keywords" content="Docker,Airflow,Kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用Docker和K8S命令">
+<meta property="og:url" content="http://bigbigben.com/2020/01/19/docker-and-k8s-commands/index.html">
+<meta property="og:site_name" content="大西洋暖流">
+<meta property="og:description" content="本篇记录工作项目中经常使用的Docker和K8S命令，我所运行Docker和K8S的工作环境如下所示，大部分本文使用的命令都可以在Linux K8S和Windows10 K8S环境使用，少数命令存在预期结果不一致的地方，请自行查阅资料解决。 注意，这并不是一篇介绍Docker和K8S是什么的文章，入门课程请自行查阅官方文档学习；如果安装Docker和K8S环境也请自行查阅资料解决。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bigbigben.com/2020/01/19/docker-and-k8s-commands/docker-volumes-folder.jpg">
+<meta property="og:updated_time" content="2020-09-12T06:04:21.642Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用Docker和K8S命令">
+<meta name="twitter:description" content="本篇记录工作项目中经常使用的Docker和K8S命令，我所运行Docker和K8S的工作环境如下所示，大部分本文使用的命令都可以在Linux K8S和Windows10 K8S环境使用，少数命令存在预期结果不一致的地方，请自行查阅资料解决。 注意，这并不是一篇介绍Docker和K8S是什么的文章，入门课程请自行查阅官方文档学习；如果安装Docker和K8S环境也请自行查阅资料解决。">
+<meta name="twitter:image" content="http://bigbigben.com/2020/01/19/docker-and-k8s-commands/docker-volumes-folder.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bigbigben.com/2020/01/19/docker-and-k8s-commands/"/>
+
+
+
+
+
+  <title>常用Docker和K8S命令 | 大西洋暖流</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <!-- add github ribbon on 2018/05/04 -->
+    <a href="https://github.com/benbendemo" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    </style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大西洋暖流</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一切都在不完美中前行</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!-- <div id="container-openwrite"> -->
+              
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2020/01/19/docker-and-k8s-commands/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">常用Docker和K8S命令</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-19T13:06:30+08:00">
+                2020-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/01/19/docker-and-k8s-commands/" class="leancloud_visitors" data-flag-title="常用Docker和K8S命令">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,072
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  19
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div id="container-openwrite">
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇记录工作项目中经常使用的Docker和K8S命令，我所运行Docker和K8S的工作环境如下所示，大部分本文使用的命令都可以在Linux K8S和Windows10 K8S环境使用，少数命令存在预期结果不一致的地方，请自行查阅资料解决。</p>
+<p>注意，这并不是一篇介绍Docker和K8S是什么的文章，入门课程请自行查阅官方文档学习；如果安装Docker和K8S环境也请自行查阅资料解决。</p>
+<a id="more"></a>
+<p>环境安装好之后，便可以直接在Terminal里输入<code>Docker</code>和<code>Kubectl</code>命令。</p>
+<hr>
+<p><strong>测试Docker环境</strong></p>
+<p>1、查看<code>Docker</code>版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker --version</div><div class="line">Docker version 19.03.5, build 633a0ea</div><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker-compose --version</div><div class="line">docker-compose version 1.24.1, build 4667896b</div><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker-machine --version</div><div class="line">docker-machine version 0.16.2, build bd45ab13</div></pre></td></tr></table></figure>
+<p>2、启动一个nginx服务器，测试Docker环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker run -d -p 80:80 --name webserver nginx</div><div class="line">d943b30fc65b3b1a4875caa3468c46bb86c9aa3ff70fce44a8576aa26fbf4e7e</div><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES</div><div class="line">d943b30fc65b        nginx               "nginx -g 'daemon of…"   17 seconds ago      Up 15 seconds       0.0.0.0:80-&gt;80/tcp   webserver</div></pre></td></tr></table></figure>
+<p><code>docker run</code>命令通过镜像创建一个容器，该命令功能强大，参数居多，这里只用到最基本的几个参数。</p>
+<p><code>docker ps</code>查看当前正在运行的镜像，Status显示内容”Up 15 seconds”表示该容器已经成功启动15秒钟。</p>
+<p>浏览器打开<a href="http://localhost，可以看到nginx的欢迎页面，说明nginx服务器启动成功。" target="_blank" rel="external">http://localhost，可以看到nginx的欢迎页面，说明nginx服务器启动成功。</a></p>
+<p>3、使用<code>docker stop container id</code>或<code>docker stop container name</code>停止这个容器(一般倾向于使用container id)</p>
+<p>4、容器停止之后，使用<code>docker ps -a</code>就可以查到该容器的结束记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker ps -a</div><div class="line">CONTAINER ID        IMAGE                                        COMMAND                  CREATED             STATUS                     PORTS                      NAMES</div><div class="line">d943b30fc65b        nginx                                        "nginx -g 'daemon of…"   8 minutes ago       Exited (0) 5 seconds ago                              webserver</div></pre></td></tr></table></figure>
+<p>5、对已停止的容器可以使用<code>docker start container id</code>  重新启动这个已停止的容器</p>
+<p>6、对正在运行的容器可以使用<code>docker restart container id</code>来重新启动该容器；当然<code>docker restart container id</code>也可以对已停止的容器使用</p>
+<p>7、容器使用后会产生log日志，我发现不管在macOS还是Windows10，PVC对应的默认文件夹路径都在”your currnet username/.docker/Volumes”这个文件夹下面</p>
+<p><img src="/2020/01/19/docker-and-k8s-commands/docker-volumes-folder.jpg" alt=""></p>
+<p>使用<code>docker rm container id</code>可以将已停止运行的容器删除</p>
+<p>8、删除已停止的容器后，可以使用<code>docker rmi image id</code>删除关联的镜像</p>
+<p>9、至此，我们的Docker环境测试就结束了；不管你是*nix系统还是Windows系统，只要Docker环境安装成功了，上面的流程都应该能成功。</p>
+<hr>
+<p><strong>Docker基础部分</strong></p>
+<p>1、<code>docker login private hub url</code>和<code>docker logout private hub url</code> </p>
+<p>环境安装好之后，使用默认的Docker Hub作为镜像仓库；我们工作项目中使用了私有镜像仓库，因此需要先login。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker login XXX.XXX.XXX.XXX</div><div class="line">Username: vnb-dev</div><div class="line">Password:</div><div class="line">Login Succeeded</div><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker login XXX.XXX.XXX.XXX</div><div class="line">Authenticating with existing credentials...</div><div class="line">Login Succeeded</div><div class="line">JacksonShawnMBP:~ jacksonshawn$</div></pre></td></tr></table></figure>
+<p>login成功就可以从这个私有仓库拉取镜像；不想使用私有仓库镜像，只需使用<code>docker logout XXX.XXX.XXX.XXX</code>退出，就会自动转为使用官方镜像。</p>
+<p>2、<code>docker logs -f container id</code>或<code>docker logs -t container id</code>查看容器日志</p>
+<p>3、容器启动成功后，可以使用<code>docker exec -it container id /bin/bash</code>或<code>docker attach container id</code>进入到容器里面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES</div><div class="line">1042cb49b1d8        ec5b6a3ab232        "airflow run worldch…"   21 minutes ago      Up 21 minutes                           k8s_base_worldcheckfiledownloaderamlgentemenosfcm-23f4d1df26f147edbcb8d4689cd9c12c_airflow_29d58db0-3a91-11ea-9053-025000000001_0</div><div class="line">861173bbd573        ec5b6a3ab232        "/entrypoint.sh sche…"   40 minutes ago      Up 40 minutes                           k8s_scheduler_airflow-858d8c6fcf-lgpm4_airflow_835bfba9-3a8e-11ea-9053-025000000001_0</div><div class="line">3da3748064ea        ec5b6a3ab232        "/entrypoint.sh webs…"   40 minutes ago      Up 40 minutes                           k8s_webserver_airflow-858d8c6fcf-lgpm4_airflow_835bfba9-3a8e-11ea-9053-025000000001_0</div><div class="line">2f9ef21f9721        vault               "docker-entrypoint.s…"   3 hours ago         Up 3 hours                              k8s_vault_vault-775bfd6575-t28bp_airflow_cc1f7cf0-376f-11ea-bf4f-025000000001_2</div><div class="line">e6c41740e6a7        53912975086f        "docker-entrypoint.s…"   3 hours ago         Up 3 hours                              k8s_postgres_postgres-airflow-55659bc6fc-xv76l_airflow_c822fe93-376f-11ea-bf4f-025000000001_2</div></pre></td></tr></table></figure>
+<p>如上所示，我们输入<code>docker exec -it 3da3748064ea bash</code>进到了k8s_webserver_airflow-xxxxxxxx容器里面，这个命令非常有用，它可以进到容器里查看环境变量、参数配置、程序代码等信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ docker exec -it 3da3748064ea bash</div><div class="line">airflow@airflow-858d8c6fcf-lgpm4:~$ ls</div><div class="line">airflow-webserver.pid  airflow.cfg  config  dags  logs  unittests.cfg  webserver_config.py</div><div class="line">airflow@airflow-858d8c6fcf-lgpm4:~$ pwd</div><div class="line">/usr/local/airflow</div></pre></td></tr></table></figure>
+<p>4、使用<code>docker save image-id</code>可以将镜像保存为.tar或.zip文件进行备份</p>
+<p>其它常用的Docker命令还有很多，比如<code>docker build</code>构建镜像和<code>docker cp</code>挂载文件卷等，今天这篇写不完，暂且先跳过，下面写最近常用的K8S命令。</p>
+<p><strong>Kubectl基础使用</strong></p>
+<p>Docker对应的是容器，K8S在容器的基础上抽象出来Pod的概念，容器包含在它里面。集群以Pod为基本单位进行管理。K8S服务启动后，首先可以查看当前启动了哪些Pod。</p>
+<p>1、<code>kubectl get pods --all-namespaces</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ kubectl get pods --all-namespaces</div><div class="line">NAMESPACE     NAME                                     READY   STATUS      RESTARTS   AGE</div><div class="line">airflow       airflow-858d8c6fcf-lgpm4                 2/2     Running     0          64m</div><div class="line">airflow       airflow-job-d4fcj                        0/1     Completed   0          64m</div><div class="line">airflow       postgres-airflow-55659bc6fc-xv76l        1/1     Running     2          4d</div><div class="line">airflow       vault-775bfd6575-t28bp                   1/1     Running     2          4d</div><div class="line">docker        compose-6c67d745f6-66cgp                 1/1     Running     2          4d</div><div class="line">docker        compose-api-57ff65b8c7-prsvq             1/1     Running     3          4d</div><div class="line">kube-system   coredns-6dcc67dcbc-h2852                 1/1     Running     5          4d</div><div class="line">kube-system   coredns-6dcc67dcbc-hffkr                 1/1     Running     35         4d</div><div class="line">kube-system   etcd-docker-desktop                      1/1     Running     2          4d</div><div class="line">kube-system   kube-apiserver-docker-desktop            1/1     Running     77         4d</div><div class="line">kube-system   kube-controller-manager-docker-desktop   1/1     Running     27         4d</div><div class="line">kube-system   kube-proxy-rghht                         1/1     Running     2          4d</div><div class="line">kube-system   kube-scheduler-docker-desktop            1/1     Running     25         4d</div></pre></td></tr></table></figure>
+<p>namespace为<code>docker</code>和<code>kube-system</code>的那些Pod都是K8S环境启动自带的服务，我们不用理会。重点关注namespace为<code>airflow</code>的这几个Pod。</p>
+<p>使用<code>kubectl get pods -n airflow</code>查看namespace为<code>airflow</code>的Pod，可以看到airflow-858d8c6fcf-lgpm4这个Pod它里面包含了2个容器，状态都是Running，没有被重启过，Pod成功运行了67分钟。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ kubectl get pods -n airflow</div><div class="line">NAME                                READY   STATUS      RESTARTS   AGE</div><div class="line">airflow-858d8c6fcf-lgpm4            2/2     Running     0          67m</div><div class="line">airflow-job-d4fcj                   0/1     Completed   0          67m</div><div class="line">postgres-airflow-55659bc6fc-xv76l   1/1     Running     2          4d</div><div class="line">vault-775bfd6575-t28bp              1/1     Running     2          4d</div></pre></td></tr></table></figure>
+<p>2、使用<code>kubectl describe pod pod-name -n airflow</code>查看Pod运行状态，但通常这个命令我觉得看不到什么有效信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">JacksonShawnMBP:~ jacksonshawn$ kubectl logs airflow-858d8c6fcf-s58tm webserver -n airflow</div><div class="line">[2020-01-19 09:44:44,346] &#123;settings.py:252&#125; INFO - settings.configure_orm(): Using pool settings. pool_size=5, max_overflow=10, pool_recycle=1800, pid=1</div><div class="line">/usr/local/lib/python3.7/site-packages/psycopg2/__init__.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use "pip install psycopg2-binary" instead. For details see: &lt;http://initd.org/psycopg/docs/install.html#binary-install-from-pypi&gt;.</div><div class="line">  """)</div><div class="line">  ____________       _____________</div><div class="line"> ____    |__( )_________  __/__  /________      __</div><div class="line">____  /| |_  /__  ___/_  /_ __  /_  __ \_ | /| / /</div><div class="line">___  ___ |  / _  /   _  __/ _  / / /_/ /_ |/ |/ /</div><div class="line"> _/_/  |_/_/  /_/    /_/    /_/  \____/____/|__/</div><div class="line">[2020-01-19 09:44:47,550] &#123;__init__.py:51&#125; INFO - Using executor KubernetesExecutor</div><div class="line">[2020-01-19 09:44:47,553] &#123;dagbag.py:92&#125; INFO - Filling up the DagBag from /dev/null</div><div class="line">[2020-01-19 09:44:48,928] &#123;security.py:453&#125; INFO - Start syncing user roles.</div><div class="line">[2020-01-19 09:44:50,479] &#123;security.py:364&#125; INFO - Fetching a set of all permission, view_menu from FAB meta-table</div><div class="line">[2020-01-19 09:44:51,504] &#123;security.py:307&#125; INFO - Cleaning faulty perms</div><div class="line">Running the Gunicorn Server with:</div><div class="line">Workers: 4 sync</div><div class="line">Host: 0.0.0.0:8080</div><div class="line">Timeout: 120</div><div class="line">Logfiles: - -</div><div class="line">=================================================================</div></pre></td></tr></table></figure>
+<p>4、使用<code>kubectl get event -n airflow</code>查看K8S启动Pod过程中产生的各类事件，对排查Pod无法启动或启动报错等原因有帮助</p>
+<p>5、假如程序版本有变动，需要发布新版本，可以使用<code>kubectl delete pod pod-name</code>一个一个将Pod删除，然后再重新启动。</p>
+<p>逐个删除Pod比较费力，我们可以使用<code>kubectl delete deployment airflow -n airflow</code>将namespac为<code>airflow</code>里面Pod名字包含<code>airflow</code>的全部一次性删除</p>
+<p>也可以直接使用<code>kubectl delete namespace airflow</code>将namespace为<code>airflow</code>的所有Pod都删除。</p>
+<p>6、使用<code>kubectl apply</code>可以将服务部署到K8S集群里面，这个需要实际操练，本文不做讲解</p>
+<p>基础的Docker和K8S命令先简单介绍到这里，经常动手操练，日积月累，才能够做到熟练应用。</p>
+<hr>
+<!--more-->
+<p><strong>常用Docker命令</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 查看Docker版本</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker --version</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker-compose --version</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker-machine --version</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 测试Docker环境</span></div><div class="line">运行nginx镜像实例，-d表示守护进程，-p表示将宿主机30882端口映射到容器的80端口</div><div class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 30882:80 --name webserver nginx</span></div><div class="line"></div><div class="line">http://localhost:30882/</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 刪除nginx服务器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker stop webserver</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rm webserver</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 列出当前执行中的容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container ls</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker ps</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 列出所有容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container ls -a     </span></div><div class="line"><span class="meta">$</span><span class="bash"> docker ps -a </span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 列出所有容器id集合</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container ls -q</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker ps -q</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 停止容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container stop &lt;<span class="built_in">hash</span>&gt;</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker stop &lt;<span class="built_in">hash</span>&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 强制退出删除容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container <span class="built_in">kill</span> &lt;<span class="built_in">hash</span>&gt;</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker <span class="built_in">kill</span> &lt;<span class="built_in">hash</span>&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container rm &lt;<span class="built_in">hash</span>&gt;</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rm &lt;<span class="built_in">hash</span>&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除所有容器（谨慎使用）</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container rm $(docker container ls -q)</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker run -d -p 8080:80 --name webserver nginx </span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看指定容器的端口映射</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker port &lt;container-id/container-name&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看容器<span class="built_in">log</span>日志</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker logs -f &lt;container-id/container-name&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看容器里运行的PID(比较少用)</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker top &lt;container-id/container-name&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 检查容器的底层信息（比较少用）</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker inspect &lt;container-id/container-name&gt; </span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查询容器IP地址方法1:</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker inspect -f <span class="string">'&#123;&#123;range .NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;'</span> &lt;container-id&gt;或&lt;container-name&gt;</span></div><div class="line"><span class="meta">#</span><span class="bash"> 查询容器IP地址方法2：</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker inspect &lt;container-id&gt;或&lt;container-name&gt; | grep IPAddress</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看宿主机ip地址</span></div><div class="line">在Linux服务器终端里使用下述命令，可以查到ip地址是172.17.0.1</div><div class="line"><span class="meta">$</span><span class="bash"> ip addr show docker0</span></div><div class="line">macOS终端没有docker0虚拟网卡，宿主机IP默认是192.168.65.1，可在docker-for-desktop里设置。</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 进入容器的两种方法，可以指定使用root用户进入容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker <span class="built_in">exec</span> -it &lt;container-id&gt; /bin/bash</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 以root用户进入容器执行操作</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker <span class="built_in">exec</span> -it --user root &lt;container-id&gt; /bin/bash</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 使用docker attach</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker attach &lt;container-id&gt;</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker attach --sig-proxy=<span class="literal">false</span> &lt;container-id&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> docker attach与docker <span class="built_in">exec</span>的区别</span></div><div class="line">docker attach可以将容器与当前终端共用一个屏幕；使用Ctrl+C可以从容器退出，也就是detach，但实际情况是将容器也停止了；加上--sig-proxy=false参数关联容器后，使用Ctrl+C从容器退出则不会将容器自动停止；</div><div class="line">docker exec是进到容器里面执行命令或查看文件，它和docker attach区别其实挺大</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 通过容器制作镜像 </span></div><div class="line">-m参数表示制作image时写的描述信息，container-id/container-name指要制作inage的容器id或容器名称，最后的“ubuntu-python3-airflow:v0.2”表示待制作镜像的image name和其版本号</div><div class="line"><span class="meta">$</span><span class="bash"> docker commit -m <span class="string">'create airflow image'</span> &lt;container-id/container-name&gt; ubuntu-python3-airflow:v0.2</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 容器端口映射</span></div><div class="line">docker run命令-it参数后面指定Repository和Tag参数或指定Image ID即可使用这个镜像创建容器并启动容器，-i参数表示可以交互，-t参数表示该容器支持终端登录，-p 8080:8080表示将宿主机的8080端口映射到容器的8080端口</div><div class="line"><span class="meta">$</span><span class="bash"> docker run -it -p 8080:8080 python3-ubuntu-stockdata:v0.1 /bin/bash</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker run -it -p 8080:8080 centos-py3.6-af:0.0.1 /bin/bash</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 容器端口映射</span></div><div class="line">如果使用-P参数，则将容器暴露的所有端口随机映射到宿主机上</div><div class="line"><span class="meta">$</span><span class="bash"> docker run -P -d nginx:latest</span></div><div class="line"></div><div class="line">下面表示将容器的80端口随机映射到宿主机的一个高段端口上（高于1024的随机端口号）</div><div class="line"><span class="meta">$</span><span class="bash"> docker run -P 80 -d nginx:latest</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 挂载文件卷</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker run -it -v /Users/jacksonshawn/Downloads/testdocker:/var alpine sh</span></div><div class="line">如上所示，将宿主机`/Users/jacksonshawn/Downloads/testdocker`文件夹挂载到alpine镜像生成的容器的`/var`路径，然后在容器中执行sh命令；</div><div class="line"></div><div class="line">挂载到容器里面的文件如果被修改或删除，对应宿主机上的文件也会被同步修改或删除，一定谨慎使用删除功能</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 宿主机拷贝文件到容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker cp /Users/jacksonshawn/Downloads/testdocker/a.txt &lt;container id&gt;:/var</span></div><div class="line">从宿主机拷贝到容器里的文件，在容器里被修改或删除后，宿主机里的文件不会被同步修改或删除</div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash"> docker cp /Users/jacksonshawn/airflow/config/airflow.cfg &lt;container-id&gt;:/usr/<span class="built_in">local</span>/airflow/airflow.cfg </span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 容器拷贝文件到宿主机</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker cp &lt;container id&gt;:/var/b.txt /Users/jacksonshawn/Downloads/testdocker</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker cp &lt;container-id&gt;:/usr/<span class="built_in">local</span>/airflow/airflow.cfg /Users/jacksonshawn/airflow/config</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 使用Dockerfile生成镜像，Dockerfile编写比较复杂，不在这里过多展开</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image build -t centos-py3.6-af:0.0.1 .</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image build --no-cache -t centos-py3.6-af:0.0.1 . -f Dockerfile.centos</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image build --no-cache -t centos-py3.6-af:0.0.1 .</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image build -t centos-py3.6-af:0.0.1 .</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 列出所有容器ID然后删除</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker ps -aq</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker stop $(docker ps -aq)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 刪除所有容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rm $(docker ps -aq)</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker container prune -f(谨慎使用)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 停止所有已经运行完的容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker stop $(docker ps -a | grep <span class="string">"Exited"</span> | awk <span class="string">'&#123;print $1 &#125;'</span>)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除所有已经运行完的容器</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rm $(docker ps -a | grep <span class="string">"Exited"</span> | awk <span class="string">'&#123;print $1 &#125;'</span>)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除所有REPOSITORY为None的镜像</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rmi $(docker images | grep <span class="string">"none"</span> | awk <span class="string">'&#123;print $3&#125;'</span>)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 刪除所有镜像（不要使用）</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rmi $(docker images -q)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 刪除所有不使用的鏡像</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image prune(谨慎使用)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除所有指定名称镜像</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image rm $(docker image ls -q redis)</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除所有镜像(不要使用)</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker image prune --force --all</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> Docker运行mssql(详细查看Docker mssql官方文档)</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker run -e <span class="string">'ACCEPT_EULA=Y'</span> -e <span class="string">'SA_PASSWORD=zaq1@WSX'</span> -p 1433:1433 --name mssql -d mcr.microsoft.com/mssql/server:2017-latest</span></div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash"> docker run --memory=512M -e <span class="string">'ACCEPT_EULA=Y'</span> -e <span class="string">'SA_PASSWORD=zaq1@WSX'</span> -p 1433:1433 --<span class="built_in">cap</span>-add SYS_PTRACE --name mssql -d mcr.microsoft.com/mssql/server:2017-latest</span></div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash"> docker run -m=2G -e <span class="string">'ACCEPT_EULA=Y'</span> -e <span class="string">'SA_PASSWORD=zaq1@WSX'</span> -p 1433:1433 --<span class="built_in">cap</span>-add SYS_PTRACE --name mssql -d mcr.microsoft.com/mssql/server:2017-latest</span></div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash"> docker <span class="built_in">exec</span> -it &lt;container-id&gt; /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P your-password</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 登录私有仓库</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker login XXX.XXX.XXX.XXX</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker <span class="built_in">logout</span> XXX.XXX.XXX.XXX</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 将image镜像备份为文件</span></div><div class="line">docker save &lt;image-id&gt; &gt; /XXX/Download/airflow.20200223.tar</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 从备份文件中导入image镜像</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker load -q -i /XXX/Download/airflow.20200223.tar</span></div><div class="line">由于导入进来的image镜像REPOSITORY和TAG都为none，需要使用docker tag来标记它的名字和标签</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 标记镜像的tag名称</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker tag &lt;image-id&gt; &lt;image-name&gt;:&lt;image-tag&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 将正在运行的容器打成镜像</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker commit &lt;container-id&gt; &lt;image-name&gt;:&lt;image-tag&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除镜像标签</span></div><div class="line"><span class="meta">#</span><span class="bash"> 对于一个镜像有多个标签的情况，以下可以删除指定的标签；如果该镜像只有一个标签，下面命令就是删除镜像</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker rmi &lt;image-name&gt;:&lt;image-tag&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看容器端口映射</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker port &lt;container-id&gt;</span></div><div class="line">如下所示，说明容器里的9000和8000端口分别被映射到了宿主机的9000和8000端口</div><div class="line">9000/tcp -&gt; 0.0.0.0:9000</div><div class="line">8000/tcp -&gt; 0.0.0.0:8000</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 显示容器使用的系统资源</span></div><div class="line"><span class="meta">$</span><span class="bash"> docker stats</span></div><div class="line">stats命令每隔1秒会刷新输出内容，在命令后面加上"--no-stream"则只输出当前状态；</div><div class="line">如果需要显示指定容器使用的系统资源，则在后面加上容器id或容器名即可，使用Ctrl+C命令退出；</div><div class="line">这个命令有个额外的作用是可以防止SSH断开</div><div class="line"></div><div class="line"><span class="meta">$</span><span class="bash"> docker stats &lt;container-id&gt;或&lt;container-name&gt;</span></div></pre></td></tr></table></figure>
+<!--more-->
+<p><strong>常用K8S命令</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 显示pod信息</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl describe pod airflow-858d8c6fcf-9q4bw --namespace=airflow &gt;&gt; pod.txt</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl describe pod airflow-job-z7f8f -n airflow &gt;&gt; pod.txt</span></div><div class="line"> </div><div class="line"><span class="meta">#</span><span class="bash"> 显示pvc信息</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl describe pvc sample-dags-pvc -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 打印pod日志信息</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl logs &lt;pod-name&gt; -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 对于一个pod里有多个container的情况</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl logs &lt;pod-name&gt; webserver -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl logs &lt;pod-name&gt; scheduler -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看k8s事件</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get event -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看集群健康状态</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get cs</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看所有namespace</span></div><div class="line"><span class="meta">$</span><span class="bash"> Kubectl get ns</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看所有service</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get service -o wide</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get services --all-namespaces</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get svc --all-namespaces</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl describe svc kubernetes</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看pods </span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get pods -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get pods --all-namespaces</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 指定yaml文件部署pods</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl apply -f k8s/airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl apply -f k8s/vault</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl apply -f k8s/deploy</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看pvc</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get pvc --all-namespaces</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete pvc &lt;pvc-name&gt; -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看pv</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get pv --all-namespaces</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看job</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get <span class="built_in">jobs</span> --all-namespaces</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除job</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete job airflow-job -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看configmap</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get configmap --all-namespaces</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get configmap &lt;configmap-name&gt; -o yaml -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get configmap airflow-configmap -o yaml -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get configmap airflow-env -o yaml -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看Secret</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get Secret --all-namespaces</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除pod</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete pod &lt;pod-name&gt; -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete po &lt;pod-name&gt; -n airflow --force --grace-period=0</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看并删除deployment</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get deployment -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete deployment &lt;deployment-name&gt; -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete deployment postgres-airflow -n airflow</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete deployment airflow -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看并删除namespace</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl get namespaces</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete namespace airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 根据配置文件创建pod</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl create -f k8s/airflow/download.local.yaml</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl create -f k8s/airflow/sampledags.local.yaml</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看pod环境变量</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl <span class="built_in">exec</span> &lt;pod-name&gt; env -n airflow</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看cluster信息</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl cluster-info</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看k8s配置文件信息</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl config view</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 配置k8s dashboard</span></div><div class="line">step1: 安装k8s dashboard镜像</div><div class="line"><span class="meta">$</span><span class="bash"> kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml</span></div><div class="line"></div><div class="line">step2: 启动k8s dashboard服务</div><div class="line"><span class="meta">$</span><span class="bash"> kubectl proxy</span></div><div class="line"></div><div class="line">step3: 获取k8s dashboard访问token</div><div class="line"><span class="meta">$</span><span class="bash"> kubectl -n kube-system describe secret default| awk <span class="string">'$1=="token:"&#123;print $2&#125;'</span></span></div><div class="line"></div><div class="line">step 4: 访问k8s dashboard页面</div><div class="line">http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 删除k8s dashboard</span></div><div class="line"><span class="meta">$</span><span class="bash"> kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 没有yaml文件时强制重启pod</span></div><div class="line">kubectl get pod &lt;podname&gt; -n &lt;namespace&gt; -o yaml | kubectl replace --force -f -</div></pre></td></tr></table></figure>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><a href="http://docs.kubernetes.org.cn" target="_blank" rel="external">Kubernetes中文社区 | 中文文档</a></li>
+<li><a href="https://jimmysong.io/kubernetes-handbook/concepts/" target="_blank" rel="external">Kubernetes架构</a></li>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="external">Docker-从入门到实践</a></li>
+</ul>
+
+      
+    </div>
+    </div>
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/about/qrcode_for_dxy-nuanliu.jpg" alt="大西洋暖流 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎订阅大西洋暖流</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    大西洋暖流
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://bigbigben.com/2020/01/19/docker-and-k8s-commands/" title="常用Docker和K8S命令">http://bigbigben.com/2020/01/19/docker-and-k8s-commands/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Airflow/" rel="tag"><i class="fa fa-tag"></i> Airflow</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Kubernetes/" rel="tag"><i class="fa fa-tag"></i> Kubernetes</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/12/python-paramiko-error/" rel="next" title="Python paramiko下载大文件报错">
+                <i class="fa fa-chevron-left"></i> Python paramiko下载大文件报错
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/21/airflow-manual/" rel="prev" title="Airflow常用操作手册">
+                Airflow常用操作手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            <!-- </div> -->
+          </div>
+            
+
+
+            
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="大西洋暖流" />
+            
+              <p class="site-author-name" itemprop="name">大西洋暖流</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/benbendemo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/benbendemo" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/benbendemo" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/links/" target="_blank" title="Links">
+                    
+                      <i class="fa fa-fw fa-link"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                常用链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="王垠" target="_blank">王垠</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://foofish.net" title="Python之禅" target="_blank">Python之禅</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://python-web-guide.readthedocs.io/zh/latest/index.html" title="Python入坑指南" target="_blank">Python入坑指南</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb" title="Echo李金" target="_blank">Echo李金</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.linuxhub.org/share/python_flask_res.html" title="Flask资源" target="_blank">Flask资源</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/benbendemo/interview_python" title="Python面试题" target="_blank">Python面试题</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/521xueweihan/HelloGitHub" title="HelloGitHub" target="_blank">HelloGitHub</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <!-- change icon to love on 2018/05/04
+    <i class="fa fa-user"></i>
+    -->
+    <i class="fa fa-heart"></i>
+
+  </span>
+  <span class="author" itemprop="copyrightHolder">大西洋暖流</span>
+  
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">93.5k</span>
+  
+</div>
+
+
+
+<!--
+  comment by benbendemo on 2019/01/11
+  <div class="powered-by">
+  Powered By <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>
+  </div>
+-->
+
+  <div style="width:auto; margin:0 auto; padding:auto 0;">
+        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+  </div>
+
+
+  	
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Y8gLw3ps66BdpCpSQVIo7izp-gzGzoHsz", "xNNF8jlpFcWA0iVnOaAaUHLw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+  <!-- Add openwrite support -->
+  <!--
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container-openwrite',
+          blogId: '17404-1571647601910-995',
+          name: '大西洋暖流',
+          qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+          keyword: 'bigbigben',
+      });
+  </script>
+  -->
+</body>
+</html>

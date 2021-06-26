@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="Python,Airflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Airflow操作流程登录使用账号、密码登录Airflow，登录成功后进到Airflow主页面。  （图1）">
+<meta name="keywords" content="Python,Airflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Airflow常用操作手册">
+<meta property="og:url" content="http://bigbigben.com/2020/01/21/airflow-manual/index.html">
+<meta property="og:site_name" content="大西洋暖流">
+<meta property="og:description" content="Airflow操作流程登录使用账号、密码登录Airflow，登录成功后进到Airflow主页面。  （图1）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/airflow-homepage.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/airflow-dag-switch.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/dag-start-date.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/dag-schedule-interval.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/dag_run_schedule_run_id.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/dag_run_manual_run_id.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/dag-graph-view2.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-status1.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-status2.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/dag-tree-view.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/tree-view1.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-popup.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun2.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun3.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun4.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun5.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun6.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun7.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-rerun8.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-xcom.jpg">
+<meta property="og:image" content="http://bigbigben.com/2020/01/21/airflow-manual/task-error-log1.jpg">
+<meta property="og:updated_time" content="2020-09-12T06:04:21.529Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Airflow常用操作手册">
+<meta name="twitter:description" content="Airflow操作流程登录使用账号、密码登录Airflow，登录成功后进到Airflow主页面。  （图1）">
+<meta name="twitter:image" content="http://bigbigben.com/2020/01/21/airflow-manual/airflow-homepage.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bigbigben.com/2020/01/21/airflow-manual/"/>
+
+
+
+
+
+  <title>Airflow常用操作手册 | 大西洋暖流</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <!-- add github ribbon on 2018/05/04 -->
+    <a href="https://github.com/benbendemo" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    </a>
+    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    </style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">大西洋暖流</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一切都在不完美中前行</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!-- <div id="container-openwrite"> -->
+              
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2020/01/21/airflow-manual/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Airflow常用操作手册</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-21T15:46:35+08:00">
+                2020-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/01/21/airflow-manual/" class="leancloud_visitors" data-flag-title="Airflow常用操作手册">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,014
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div id="container-openwrite">
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Airflow操作流程"><a href="#Airflow操作流程" class="headerlink" title="Airflow操作流程"></a>Airflow操作流程</h2><h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><p>使用账号、密码登录Airflow，登录成功后进到Airflow主页面。</p>
+<p><img src="/2020/01/21/airflow-manual/airflow-homepage.jpg" alt="airflow-homepage"></p>
+<p>（图1）</p>
+<a id="more"></a>
+<h3 id="打开Dag开关"><a href="#打开Dag开关" class="headerlink" title="打开Dag开关"></a>打开Dag开关</h3><p><img src="/2020/01/21/airflow-manual/airflow-dag-switch.jpg" alt="airflow-dag-switch"></p>
+<p>（图2）</p>
+<p>选中需要执行的DAG，如图2中，数字1表示打开DAG开关，数字2表示当前UTC时间；数字3表示该DAG自动触发的时间间隔，参数表示的意思是Airflow调度器每天05:30分和17:30分Trigger一次DAG批量。</p>
+<p>由于worldcheck_file_downloader已经设置好了自动Trigger时间，DAG开关打开后，Airflow检测到当前系统时间（数字2）达到了DAG触发的时间，整个DAG就会自动执行，Airflow将DAG的每一次执行命名为一次Dag Run，这个词不太好翻译，我们将它理解为一个批次就好。</p>
+<p>注意：</p>
+<p>如数字4，DAG开关打开后，如果已经触发了批次，在已有task执行的情况下，关闭DAG开关，不会影响当前正在执行的task；如果当前没有task执行，关闭DAG开关，整个DAG就处于关闭状态，DAG开关关闭后即便task达到触发时间，也不会被调度执行（如图4说明）</p>
+<h3 id="start-date和schedule-interval"><a href="#start-date和schedule-interval" class="headerlink" title="start_date和schedule_interval"></a>start_date和schedule_interval</h3><p><img src="/2020/01/21/airflow-manual/dag-start-date.jpg" style="zoom:50%;"></p>
+<p>（图3）</p>
+<p><img src="/2020/01/21/airflow-manual/dag-schedule-interval.jpg" style="zoom:50%;"></p>
+<p>（图4）</p>
+<p>进到DAG执行页面，点击”Code”，查看start_date参数，<code>airflow.utils.dates.days_ago(1)</code>表示是当前日期前一天的零时零分零秒。schedule_interval参数表示DAG被触发的时间间隔，’30 05,17 <em> </em> *’表示每天的05:30和17:30，该DAG会被自动触发，它与Linux cron表达式的格式兼容。</p>
+<h3 id="理解Dag-Run"><a href="#理解Dag-Run" class="headerlink" title="理解Dag Run"></a>理解Dag Run</h3><p>假如今天日期是2020-01-21，上图中start_date表示2020-01-20这天的零时零分零秒，即”<strong>2020-01-20 00:00:00+00:00</strong>“ 这个时间点。</p>
+<p>你可能会奇怪，这个时间怎么是一个过去的时间？</p>
+<p>其实Airflow的设置规则是：以<strong>start_date</strong> + <strong>schedule_interval</strong>之后的第一个时间点作为第一次触发时间，因此该DAG首次触发时间为2020-01-20 17:30:00+00:00，并不是2020-01-20 05:30:00+00:00；理解这里是一个难点。该DAG首次触发时间是2020-01-20 17:30:00+00:00，此后触发时间依次是2020-01-21 05:30:00+00:00、2020-01-21 17:30:00+00:00、2020-01-22 05:30:00+00:00······注意，这些触发时间并不代表这个批次真正开始执行的时间。</p>
+<p>该触发时间只是Dag Run的时间，它只用于确定该批次run_id的时间。见下图5。</p>
+<p><img src="/2020/01/21/airflow-manual/dag_run_schedule_run_id.jpg" style="zoom:50%;"></p>
+<p>（图5）</p>
+<p>红色方框中的Run和run_id是同一个时间”2020-01-17T05:30:00+00:00”，这个批次真正开始执行的时间是Started参数的时间，它是”2020-01-17T17:30:09.250405+00:00”.</p>
+<p>如果是手工Trigger的批次，run_id会以”manual”开头，Run、run_id两个参数对应的也是同一个时间，手工Trigger的批次，started时间与run_id时间比较一致。见下图6。</p>
+<p><img src="/2020/01/21/airflow-manual/dag_run_manual_run_id.jpg" style="zoom:50%;"></p>
+<p>（图6）</p>
+<p>理解Airflow每个批次的执行时间是一个难点。</p>
+<h3 id="查看Dag执行状态"><a href="#查看Dag执行状态" class="headerlink" title="查看Dag执行状态"></a>查看Dag执行状态</h3><h4 id="查看Graph-View"><a href="#查看Graph-View" class="headerlink" title="查看Graph View"></a>查看Graph View</h4><p>在<code>Graph View</code>查看DAG执行状态。</p>
+<p><img src="/2020/01/21/airflow-manual/dag-graph-view2.jpg" alt=""></p>
+<p>（图7）</p>
+<p>DAG是一个有向无环图，它是一个单向流动的ETL流程图，从上图7中可以看到每一个task的先后执行顺序以及前后依赖关系。只有前置task执行成功后，后续task才会被Trigger；如果后续task有并行分支，会被同时Trigger执行。如上图7<code>aml_get_wc_vault_credentials</code>执行成功后，后续4个task都会同时执行。</p>
+<p>对于已经执行完的task，鼠标停留在task上面，会自动浮现出一个黑色的提醒框，显示该task的基本情况。</p>
+<p>如图7，鼠标停留在<code>latest_only</code>task上面</p>
+<ol>
+<li><p>数字1：Airflow当前UTC时间</p>
+</li>
+<li><p>数字2：默认显示一个与数字1一样的时间，自动跟随数字1的时间变动而变动</p>
+</li>
+<li><p>数字3：DAG当前批次触发的时间，也就是Dag Run时间，没有什么实际意义</p>
+</li>
+<li><p>数字4：该task开始执行的时间</p>
+</li>
+<li><p>数字5：该task开始执行和结束执行的UTC时间</p>
+</li>
+<li><p>数字6：该task开始执行和结束执行的CST时间，也就是香港本地时间</p>
+</li>
+</ol>
+<h4 id="了解task-status"><a href="#了解task-status" class="headerlink" title="了解task status"></a>了解task status</h4><p>Airflow中每一个task可能有8种状态，使用8种不同的颜色标注，分别是<code>success</code>、<code>running</code>、<code>failed</code>、<code>skipped</code>、<code>up_for_reschedule</code>、<code>up_for_retry</code>、<code>queued</code>、<code>no_status</code>。</p>
+<p>每一个task被调度执行前都是<code>no_status</code>状态；</p>
+<p>当被调度器传入作业队列之后，状态被更新为<code>queued</code>；</p>
+<p>被调度器调度执行后，状态被更新为<code>running</code>；</p>
+<p><img src="/2020/01/21/airflow-manual/task-status1.jpg" style="zoom:50%;"></p>
+<p>（图8）</p>
+<p>如上图8所示，<code>aml_dwn_premium_fullsize_gz</code>task正在执行中，后续作业都在pending它的执行结果</p>
+<p>如果该task执行成功，状态会被更新为<code>success</code>；</p>
+<p>如果该task执行失败，如果没有设置retry参数，状态立马被更新为<code>failed</code>；如果有设置retry参数，第一次执行失败后，会被更新为<code>up_for_retry</code>状态，等待重新被调度执行，执行完retry次数仍然失败则状态会被更新为<code>failed</code>；</p>
+<p><code>skipped</code>状态是指该task被跳过不执行，在worldcheck_file_downloader这个DAG里没有出现；</p>
+<p><code>up_for_reschedule</code>状态是指等待重新调度，在worldcheck_file_downloader这个DAG里没有出现；</p>
+<ol>
+<li>数字7：鼠标选中一种状态点击后，所有该状态的task都会高亮显示，再次点击后，高亮效果自动消失；</li>
+</ol>
+<p>如下图9，选中”running”状态后，<code>Graph View</code>里只将状态为”running”的task高亮出来，再次点击”running”状态，高亮效果自动取消</p>
+<p><img src="/2020/01/21/airflow-manual/task-status2.jpg" alt=""></p>
+<p>（图9）</p>
+<h4 id="了解Operator"><a href="#了解Operator" class="headerlink" title="了解Operator"></a>了解Operator</h4><ol>
+<li>数字8：显示当前task属于Airflow哪种类型的Operator。从数字8里可以看出，该DAG一共使用了<code>DummyOperator</code>、<code>EmailOperator</code>、<code>KubernetesPodOperator</code>、<code>LatestOnlyOperator</code>、<code>ShortCircutOperator</code>5种不同的Operator。更复杂的DAG，可能会使用更多其它类型的Operator。</li>
+</ol>
+<h4 id="Dag-Run状态"><a href="#Dag-Run状态" class="headerlink" title="Dag Run状态"></a>Dag Run状态</h4><ol>
+<li>数字9：显示DAG当前批次的执行状态，DAG每个批次执行完后，只要有一个task执行状态为<code>failed</code>，则该批次的执行状态会被标记为<code>failed</code>，只有当所有task执行状态为<code>success</code>，该批次的执行状态才会被标记为<code>success</code>。</li>
+</ol>
+<h4 id="查看Tree-View"><a href="#查看Tree-View" class="headerlink" title="查看Tree View"></a>查看Tree View</h4><p>在<code>Tree View</code>查看每一个Dag Run执行情况</p>
+<p><img src="/2020/01/21/airflow-manual/dag-tree-view.jpg" style="zoom:50%;"></p>
+<p>（图10）</p>
+<p>如图10所示，Tree View中第一行是每一个Dag Run的执行结果，红色表示该批次执行失败；绿色表示该批次执行成功；鼠标放在每一个圆圈上面，会浮现一个提示框，显示该批次的执行情况。</p>
+<h3 id="手工Trigger-DAG执行"><a href="#手工Trigger-DAG执行" class="headerlink" title="手工Trigger DAG执行"></a>手工Trigger DAG执行</h3><p>点击”Trigger DAG”图标，Airflow会触发一次批量执行，这种人为干预触发的批量，在”Tree View”页面里，其run_id上会显示以manual开头的字符串，表示该批次是手工触发执行。手工Trigger的Dag Run，Started参数与run_id参数比较一致，只是稍稍晚了几秒钟。</p>
+<p><img src="/2020/01/21/airflow-manual/tree-view1.jpg" alt=""></p>
+<p>（图11）</p>
+<p>手工Trigger的批次，和Airflow调度器自动Trigger的批次一样，也是一个完整的批次，从第一个task开始执行到最后一个task。</p>
+<h3 id="task-rerun弹窗"><a href="#task-rerun弹窗" class="headerlink" title="task rerun弹窗"></a>task rerun弹窗</h3><p><img src="/2020/01/21/airflow-manual/task-popup.jpg" style="zoom:50%;"></p>
+<p>（图12）</p>
+<p>点击每一个task，都会弹出这样一个提示框，如上图12所示。</p>
+<ol>
+<li><p>在数字1中分别点击每一个button，可以跳转到对应页面，查看这个task对应的Task Instance Details信息、Rendered信息、Task Instance信息、Log信息。这4个button中对我们最有用的是”View Log”这个button；</p>
+</li>
+<li><p>数字2显示该task一共被执行了3次，点击”All”会下载全部3次执行的log日志；点击数字1、2、3则分别只下载那一次的执行结果；</p>
+</li>
+<li><p>点击数字3中的”Run”可以单次执行该task，右边3个button是执行task时可以选择的条件，鼠标停留在每一个条件上会显示该条件表示的含义。选择”Ignore All Deps”表示忽略该task的前后依赖条件及之前批次的执行状态，直接执行该task。后面两个条件使用得不多，暂不做介绍。</p>
+</li>
+<li><p>数字4里的”Clear”表示可以清除当前task的执行状态，清除执行状态后，该task会被自动重置为<code>no_status</code>，等待Airflow调度器自动调度执行；注意数字4中”Downstream”和”Recursive”是默认选中的，它的意思是当你点击”Clear”后，当前task及所有后置task的状态都会被清除，即当前task及所有后置task都会重新等待调度执行；</p>
+<p>数字4中如果在默认选中”Downstream”和”Recursive”同时，选中”Failed”条件，则表示点击”Clear”后当前task及后置task中所有状态为<code>failed</code>的task会被重新调度执行；</p>
+<p>如果同时选中”Upstream”和”Recursive”，点击”Clear”后则表示从Dag第一个task到当前task，这条路径上的所有task会被重新调度执行；其它几个参数使用不多，暂不做介绍。</p>
+</li>
+<li><p>数字5里的button用于标记task的执行状态，可以将单个task的状态标记为<code>failed</code>，也可以配合”Upstream”参数或”Downstream”参数，将该task所在分支上的所有task的状态标记为<code>failed</code>；</p>
+</li>
+<li><p>数字6和数字5里功能类似，只是用来将task执行状态标记为<code>success</code>。</p>
+</li>
+</ol>
+<h3 id="task-rerun规则"><a href="#task-rerun规则" class="headerlink" title="task rerun规则"></a>task rerun规则</h3><ol>
+<li>整个DAG有4个分支，每个分支都是独立运行，互相不会产生影响。原则上每个task都可以在自己分支上return，不管它上一次的执行结果是成功还是失败。</li>
+<li>fullsize分支<code>aml_gen_temenos_fcm</code>这个task依赖两个前置task，只有两个前置task执行成功后，才可以rerun当前这个task。</li>
+<li>由于vault TTL参数被设置为1h，从vault获取sftp账号密码task只能在TTL有效期内被rerun，超过TTL有效期，需要先执行它的前置task，然后才可以rerun</li>
+<li>只要一个task的前置条件得到满足，它就可以被手工rerun。</li>
+</ol>
+<h3 id="失败task-rerun"><a href="#失败task-rerun" class="headerlink" title="失败task rerun"></a>失败task rerun</h3><p>整个DAG执行流程中，难免会出现task执行失败。如果出现task执行失败，可以选择手工rerun失败task，也可以视情况rerun整个DAG 分支。</p>
+<h4 id="单个task-rerun"><a href="#单个task-rerun" class="headerlink" title="单个task rerun"></a>单个task rerun</h4><p><img src="/2020/01/21/airflow-manual/task-error-rerun2.jpg" alt=""></p>
+<p>（图13）</p>
+<p>如图13，点击失败task，弹出提示框后，选中”Ignore All Deps”然后点击”Run”即可忽略该task的所有依赖条件立刻执行该task，这种方法只会执行当前这一个task。</p>
+<h4 id="rerun失败task及所有后续作业"><a href="#rerun失败task及所有后续作业" class="headerlink" title="rerun失败task及所有后续作业"></a>rerun失败task及所有后续作业</h4><p>1、点击失败task作业，弹出提示框后，选中”Downstream”和”Recursive”后，点击”Clear”按钮</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-rerun3.jpg" alt=""></p>
+<p>（图14）</p>
+<p>2、点击”Clear”按钮后，会将当前task及所有后续task作业的task id打印出来</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-rerun4.jpg" alt=""></p>
+<p>（图15）</p>
+<p>3、点击”OK”后，Airflow会将这些task的最近一次执行记录清除，然后将当前task及后续所有task生成新的task instance，将它们放入队列由调度器调度重新执行</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-rerun5.jpg" alt=""></p>
+<p>（图16）</p>
+<p>从上图可以看到aml_native_dummy task及后续4个task的状态都被更新为”no_status”</p>
+<h4 id="rerun失败task及所有之前的作业"><a href="#rerun失败task及所有之前的作业" class="headerlink" title="rerun失败task及所有之前的作业"></a>rerun失败task及所有之前的作业</h4><p>1、选中需要执行的task，弹出提示框后，选中”Upstream”和”Recursive”后，点击”Clear”按钮</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-rerun6.jpg" alt=""></p>
+<p>（图17）</p>
+<p>2、点击”Clear”按钮后，会将当前task及所有前置task的task id打印出来</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-rerun7.jpg" alt=""></p>
+<p>（图18）</p>
+<p>3、点击”OK”后，Airflow会将这些task的最近一次执行记录清除，然后为当前task及所有前置task生成新的instance，将它们放入队列由调度器调度执行</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-rerun8.jpg" alt=""></p>
+<p>（图19）</p>
+<p>从上图可以看到aml_native_dummy task及后续4个task的状态都被更新为”no_status”</p>
+<h3 id="查看task-XCom"><a href="#查看task-XCom" class="headerlink" title="查看task XCom"></a>查看task XCom</h3><p><img src="/2020/01/21/airflow-manual/task-xcom.jpg" style="zoom:50%;"></p>
+<p>（图20）</p>
+<p>在查看task执行日志旁边，有一个”Xcom”按钮，XCom是Ariflow用于在task之间传递参数的组件。在worldcheck_file_downloader这个DAG中大量使用XCom组件进行参数传递。如下载文件task，备份AWS S3这些task，都有使用XCom功能传递参数，参数传递成功后，参数内容会在XCom页面保留，可以用来辅助查看这些task的执行情况是否符合预期。</p>
+<h2 id="查看Airflow日志"><a href="#查看Airflow日志" class="headerlink" title="查看Airflow日志"></a>查看Airflow日志</h2><p>Dev环境中，可以直接点击”View Log” button查看task的执行日志；由于SIT环境作业日志被定向收集到日志服务器，需要在Kibana里搜索task name查询日志。</p>
+<p><img src="/2020/01/21/airflow-manual/task-error-log1.jpg" alt=""></p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><a href="https://airflow.apache.org/docs/stable/index.html" target="_blank" rel="external">Airflow Documentaion</a></li>
+</ul>
+
+      
+    </div>
+    </div>
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/about/qrcode_for_dxy-nuanliu.jpg" alt="大西洋暖流 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎订阅大西洋暖流</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    大西洋暖流
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://bigbigben.com/2020/01/21/airflow-manual/" title="Airflow常用操作手册">http://bigbigben.com/2020/01/21/airflow-manual/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          
+          <!-- change # to special sign on 2018/05/04 -->
+            <a href="/tags/Airflow/" rel="tag"><i class="fa fa-tag"></i> Airflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/19/docker-and-k8s-commands/" rel="next" title="常用Docker和K8S命令">
+                <i class="fa fa-chevron-left"></i> 常用Docker和K8S命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/24/2020-lunar-new-year/" rel="prev" title="2020农历新年快乐">
+                2020农历新年快乐 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+            <!-- </div> -->
+          </div>
+            
+
+
+            
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="大西洋暖流" />
+            
+              <p class="site-author-name" itemprop="name">大西洋暖流</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/benbendemo" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/benbendemo" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/benbendemo" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="/links/" target="_blank" title="Links">
+                    
+                      <i class="fa fa-fw fa-link"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                常用链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000" title="廖雪峰" target="_blank">廖雪峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="王垠" target="_blank">王垠</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://foofish.net" title="Python之禅" target="_blank">Python之禅</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://python-web-guide.readthedocs.io/zh/latest/index.html" title="Python入坑指南" target="_blank">Python入坑指南</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb" title="Echo李金" target="_blank">Echo李金</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.linuxhub.org/share/python_flask_res.html" title="Flask资源" target="_blank">Flask资源</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/benbendemo/interview_python" title="Python面试题" target="_blank">Python面试题</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/521xueweihan/HelloGitHub" title="HelloGitHub" target="_blank">HelloGitHub</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Airflow操作流程"><span class="nav-number">1.</span> <span class="nav-text">Airflow操作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#登录"><span class="nav-number">1.1.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开Dag开关"><span class="nav-number">1.2.</span> <span class="nav-text">打开Dag开关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#start-date和schedule-interval"><span class="nav-number">1.3.</span> <span class="nav-text">start_date和schedule_interval</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解Dag-Run"><span class="nav-number">1.4.</span> <span class="nav-text">理解Dag Run</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看Dag执行状态"><span class="nav-number">1.5.</span> <span class="nav-text">查看Dag执行状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看Graph-View"><span class="nav-number">1.5.1.</span> <span class="nav-text">查看Graph View</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#了解task-status"><span class="nav-number">1.5.2.</span> <span class="nav-text">了解task status</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#了解Operator"><span class="nav-number">1.5.3.</span> <span class="nav-text">了解Operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dag-Run状态"><span class="nav-number">1.5.4.</span> <span class="nav-text">Dag Run状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看Tree-View"><span class="nav-number">1.5.5.</span> <span class="nav-text">查看Tree View</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手工Trigger-DAG执行"><span class="nav-number">1.6.</span> <span class="nav-text">手工Trigger DAG执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#task-rerun弹窗"><span class="nav-number">1.7.</span> <span class="nav-text">task rerun弹窗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#task-rerun规则"><span class="nav-number">1.8.</span> <span class="nav-text">task rerun规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#失败task-rerun"><span class="nav-number">1.9.</span> <span class="nav-text">失败task rerun</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单个task-rerun"><span class="nav-number">1.9.1.</span> <span class="nav-text">单个task rerun</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rerun失败task及所有后续作业"><span class="nav-number">1.9.2.</span> <span class="nav-text">rerun失败task及所有后续作业</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rerun失败task及所有之前的作业"><span class="nav-number">1.9.3.</span> <span class="nav-text">rerun失败task及所有之前的作业</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看task-XCom"><span class="nav-number">1.10.</span> <span class="nav-text">查看task XCom</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看Airflow日志"><span class="nav-number">2.</span> <span class="nav-text">查看Airflow日志</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <!-- change icon to love on 2018/05/04
+    <i class="fa fa-user"></i>
+    -->
+    <i class="fa fa-heart"></i>
+
+  </span>
+  <span class="author" itemprop="copyrightHolder">大西洋暖流</span>
+  
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">93.5k</span>
+  
+</div>
+
+
+
+<!--
+  comment by benbendemo on 2019/01/11
+  <div class="powered-by">
+  Powered By <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>
+  </div>
+-->
+
+  <div style="width:auto; margin:0 auto; padding:auto 0;">
+        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+  </div>
+
+
+  	
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Y8gLw3ps66BdpCpSQVIo7izp-gzGzoHsz", "xNNF8jlpFcWA0iVnOaAaUHLw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+
+  <!-- Add openwrite support -->
+  <!--
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container-openwrite',
+          blogId: '17404-1571647601910-995',
+          name: '大西洋暖流',
+          qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+          keyword: 'bigbigben',
+      });
+  </script>
+  -->
+</body>
+</html>
