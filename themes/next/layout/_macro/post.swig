@@ -258,7 +258,7 @@
     {#################}
     {### POST BODY ###}
     {#################}
-    <div id="container-openwrite">
+    {### <div id="container-openwrite"> ###}
     <div class="post-body{% if theme.han %} han-init-context{% endif %}{% if post.direction && post.direction.toLowerCase() === 'rtl' %} rtl{% endif %}" itemprop="articleBody">
 
       {# Gallery support #}
@@ -321,7 +321,7 @@
         {{ post.content }}
       {% endif  %}
     </div>
-    </div>
+    {### </div> ###}
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
