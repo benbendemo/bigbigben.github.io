@@ -306,6 +306,289 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/04/09/mongodb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/09/mongodb/" itemprop="url">Mac MongoDB启动关闭命令</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T20:41:32+08:00">
+                2018-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/09/mongodb/" class="leancloud_visitors" data-flag-title="Mac MongoDB启动关闭命令">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,269
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>半年前写过一个爬虫程序，用MongoDB作为持久化工具。今天把之前的爬虫程序整理一番，发现对MongoDB的操作有点生疏，在此做一个整理。</p>
+<p>本文只讲解macOS系统下MongoDB的使用方式，版本号是v4.2.8，不涉及Windows或Linux系统，如果存在偏差，请自行查阅相关文档。</p>
+<h3 id="Standalone模式"><a href="#Standalone模式" class="headerlink" title="Standalone模式"></a>Standalone模式</h3><p>我们知道，mongodb启动的命令是<code>mongod</code>，它有两种方式启动，一是命令行带参数，二是配置文件方式。用命令行带参数启动方式比较简单省事，甚至你直接在终端里输入<code>mongod</code>就可以启动MongoDB服务（注意，这种方式启动成功的前提是已经创建好<code>/data/db</code>目录，并且设置成功相应的权限，<code>/data/db</code>目录是MongoDB默认存放数据的地方，就和MySQL一样数据库里每一条记录最终会存储在硬盘的某一个文件夹下面一样（在MySQL shell里输入<code>show variables like &#39;%datadir%&#39;</code>即可查看数据库对应文件夹的位置）；只不过MongoDB需要自己先定义好）。</p>
+<p>一般情况下，都应该使用指定配置文件方式启动。</p>
+<ul>
+<li><p>命令行方式启动<br>这种方式就是启动的时候不用配置文件，配置文件里的配置项都直接写在命令行上。</p>
+<p><code>mongod --dbpath=/usr/local/mongodb/data/ --logpath=/usr/local/mongodb/log/mongodb.log</code></p>
+<p>命令行方式比较繁琐，而且需要手动敲一长串参数文件，不常用。</p>
+</li>
+</ul>
+<ul>
+<li><p>配置文件方式启动</p>
+<p>将默认启动参数以yaml文件格式写到一个配置文件里。使用<code>mongod -f /XXX/mongod.conf</code>方式启动。</p>
+</li>
+</ul>
+<p>下面便是我使用的配置文件，路径我选择使用<code>/usr/local/mongodb/etc/mongod.conf</code>。</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># for documentation of all options, see:</span></div><div class="line"><span class="meta">#   http:<span class="comment">//docs.mongodb.org/manual/reference/configuration-options/</span></span></div><div class="line"></div><div class="line"><span class="meta"># where to write logging data.</span></div><div class="line"><span class="symbol"> systemLog:</span></div><div class="line"><span class="symbol">    destination:</span> file</div><div class="line"><span class="symbol">    logAppend:</span> true</div><div class="line"><span class="symbol">    path:</span> <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/mongodb/</span>log/mongodb.log</div><div class="line"></div><div class="line"><span class="meta"># Where and how to store data.</span></div><div class="line"><span class="symbol"> storage:</span></div><div class="line"><span class="symbol">    dbPath:</span> <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/mongodb/</span>data/</div><div class="line"><span class="symbol">    journal:</span></div><div class="line"><span class="symbol">        enabled:</span> true</div><div class="line"></div><div class="line"><span class="meta"># how the process runs</span></div><div class="line"><span class="symbol"> processManagement:</span></div><div class="line"><span class="symbol">    fork:</span> true  <span class="meta"># fork and run in background</span></div><div class="line"><span class="symbol">    pidFilePath:</span> <span class="meta-keyword">/var/</span>run<span class="meta-keyword">/mongodb/</span>mongod.pid  <span class="meta"># location of pidfile</span></div><div class="line"></div><div class="line"><span class="meta"># network interfaces</span></div><div class="line"><span class="symbol"> net:</span></div><div class="line"><span class="symbol">    port:</span> <span class="number">27017</span></div><div class="line"><span class="symbol">    bindIp:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>  </div><div class="line"></div><div class="line"><span class="symbol"> security:</span></div><div class="line"><span class="symbol">    authorization:</span> enabled</div></pre></td></tr></table></figure>
+<p>启动命令：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongod -f <span class="regexp">/usr/</span>local<span class="regexp">/mongodb/</span>etc<span class="regexp">/mongodb.conf</span></div></pre></td></tr></table></figure>
+<p>如果启动成功，在浏览器打开<a href="http://localhost:27017" target="_blank" rel="external">http://localhost:27017</a> ，能看到以下提示信息。</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">It looks like you are trying <span class="keyword">to</span> access MongoDB <span class="keyword">over</span> HTTP <span class="keyword">on</span> <span class="keyword">the</span> native driver port.</div></pre></td></tr></table></figure>
+<h3 id="ReplicaSet模式"><a href="#ReplicaSet模式" class="headerlink" title="ReplicaSet模式"></a>ReplicaSet模式</h3><p>上面使用<strong>单机（Standalone）</strong>模式启动MongoDB，实际生产环境中，单机模式面临着很大的风险，一旦数据库服务出现问题，就会导致线上服务出现异常甚至崩溃，我们需要对MongoDB做相应的主备处理，提高数据库服务的可用性。这就是<strong>复制集（Replica Set）</strong>模式。</p>
+<p>Replica Set是一堆mongod实例集合，它们有着同样的数据内容，包含三类角色：</p>
+<ol>
+<li>主节点（Primary）：接收所有的写请求，然后把修改同步到所有Secondary。一个Replica Set只能有一个Primary节点，当Primary挂掉后，其他Secondary或者Arbiter节点会重新选举出来一个主节点。默认读请求也是发到Primary节点处理的，如需要转发到Secondary需要客户端修改一下连接配置。</li>
+<li>副本节点（Secondary）：与主节点保持同样的数据集。当主节点挂掉的时候，参与选举。</li>
+<li>仲裁者（Arbiter）：不保存数据，不参与竞选，只参与投票。使用Arbiter可以减轻数据存储的硬件需求，运行Arbiter的机器不需要过高的资源需求，它的作用是当两个Secondary节点投票结果一致时，可以决定哪一个节点胜出升级为Primay节点；很重要的一点是，在生产环境下它和其他数据节点不要部署在同一台机器上。</li>
+</ol>
+<p>注意，一个自动failover的Replica Set节点数必须为奇数，目的是选举投票的时候要有一个大多数才能进行选主决策。</p>
+<p>贴两张图展示一下复制集模式，详细介绍请自行搜索查阅。</p>
+<p><img src="/2018/04/09/mongodb/replicaset_1.png" alt=""></p>
+<p><img src="/2018/04/09/mongodb/replicaset_2.png" alt=""></p>
+<p>复制集模式，需要分别启动3个独立的<code>mongod</code>服务，我创建了一个新文件夹replicaset用于存放3个节点的数据，如下所示。</p>
+<p><img src="/2018/04/09/mongodb/replicaset_conf.jpg" style="zoom:50%;"></p>
+<p>在<code>/var/run</code>目录下创建replicaset文件夹，在里面存放3个节点各自对应的PID文件。</p>
+<p><img src="/2018/04/09/mongodb/replicaset_pid.jpg" style="zoom:50%;"></p>
+<p>下面列出其中一个节点rs0的配置文件信息，rs1和rs2参照rs0配置即可，端口号依次用27017、27018、27019。</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># where to write logging data.</span></div><div class="line"><span class="symbol"> systemLog:</span></div><div class="line"><span class="symbol">    destination:</span> file</div><div class="line"><span class="symbol">    logAppend:</span> true</div><div class="line"><span class="symbol">    path:</span> <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/mongodb/</span>replicaset<span class="meta-keyword">/rs0/</span>log/mongodb.log</div><div class="line"></div><div class="line"><span class="meta"># Where and how to store data.</span></div><div class="line"><span class="symbol"> storage:</span></div><div class="line"><span class="symbol">    dbPath:</span> <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/mongodb/</span>replicaset<span class="meta-keyword">/rs0/</span>data/</div><div class="line"><span class="symbol">    journal:</span></div><div class="line"><span class="symbol">        enabled:</span> true</div><div class="line"></div><div class="line"><span class="meta"># how the process runs</span></div><div class="line"><span class="symbol"> processManagement:</span></div><div class="line"><span class="symbol">    fork:</span> true  <span class="meta"># fork and run in background</span></div><div class="line"><span class="symbol">    pidFilePath:</span> <span class="meta-keyword">/var/</span>run<span class="meta-keyword">/mongodb/</span>replicaset<span class="meta-keyword">/rs0/</span>mongod.pid  <span class="meta"># location of pidfile</span></div><div class="line"></div><div class="line"><span class="meta"># network interfaces</span></div><div class="line"><span class="symbol"> net:</span></div><div class="line"><span class="symbol">    port:</span> <span class="number">27017</span></div><div class="line"><span class="symbol">    bindIp:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line"></div><div class="line"><span class="symbol"> security:</span></div><div class="line"><span class="symbol">    authorization:</span> disabled</div><div class="line"></div><div class="line"><span class="symbol"> replication:</span></div><div class="line"><span class="symbol">   oplogSizeMB:</span> <span class="number">64</span></div><div class="line"><span class="symbol">   replSetName:</span> rstest</div></pre></td></tr></table></figure>
+<p>打开终端，依次执行下面3条命令，即启动了3个mongod后台服务。</p>
+<p><code>mongod -f /usr/local/mongodb/replicaset/rs0/etc/mongod.conf</code></p>
+<p><code>mongod -f /usr/local/mongodb/replicaset/rs1/etc/mongod.conf</code></p>
+<p><code>mongod -f /usr/local/mongodb/replicaset/rs2/etc/mongod.conf</code></p>
+<h4 id="1-ReplicaSet初始化"><a href="#1-ReplicaSet初始化" class="headerlink" title="1. ReplicaSet初始化"></a>1. ReplicaSet初始化</h4><p>在终端输入mongo（不指定节点IP地址和端口号，默认等同于输入mongo 127.0.0.1:27017），输入<code>rs.status()</code>命令，可以看到replset当前没有初始化。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;</span><span class="bash"> rs.status()</span></div><div class="line">&#123;</div><div class="line">	"ok" : 0,</div><div class="line">	"errmsg" : "no replset config has been received",</div><div class="line">	"code" : 94,</div><div class="line">	"codeName" : "NotYetInitialized"</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>整理如下replset配置信息，执行<code>rs.initiate(conf)</code>命令，返回<code>{ &quot;ok&quot; : 1 }</code>表示节点部署成功。</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">conf = &#123;</div><div class="line">    <span class="string">"_id"</span> : <span class="string">"rstest"</span>,</div><div class="line">    <span class="string">"members"</span> : [</div><div class="line">        &#123; <span class="string">"_id"</span> : <span class="number">0</span>,  <span class="string">"host"</span> : <span class="string">"127.0.0.1:27017"</span> &#125;,</div><div class="line">        &#123; <span class="string">"_id"</span> : <span class="number">1</span>,  <span class="string">"host"</span> : <span class="string">"127.0.0.1:27018"</span> &#125;,</div><div class="line">        &#123; <span class="string">"_id"</span> : <span class="number">2</span>,  <span class="string">"host"</span> : <span class="string">"127.0.0.1:27019"</span> &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>部署成功后，会自动选举一个Primay节点。</p>
+<p>输入<code>rs.status()</code>查看状态（我用<code>......</code>省略掉无效内容），可以看到members数组里有三个成员，<code>stateStr</code>代表节点的类型；<code>health</code>代表节点的状态，1表示健康；注意看27018和27019两个节点里有<code>syncingTo</code>这个参数，表示它们与27017保持同步。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="string">"set"</span> : <span class="string">"rstest"</span>,</div><div class="line">	<span class="string">"date"</span> : ISODate(<span class="string">"2020-07-08T14:37:09.527Z"</span>),</div><div class="line">	<span class="string">"myState"</span> : <span class="number">1</span>,</div><div class="line">	......</div><div class="line"><span class="string">"members"</span> : [</div><div class="line">		&#123;</div><div class="line">			<span class="string">"_id"</span> : <span class="number">0</span>,</div><div class="line">			<span class="string">"name"</span> : <span class="string">"127.0.0.1:27017"</span>,</div><div class="line">			<span class="string">"health"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"state"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"stateStr"</span> : <span class="string">"PRIMARY"</span>,</div><div class="line">			<span class="string">"uptime"</span> : <span class="number">100</span>,</div><div class="line">			<span class="string">"optime"</span> : &#123;</div><div class="line">				<span class="string">"ts"</span> : Timestamp(<span class="number">1594259842</span>, <span class="number">1</span>),</div><div class="line">				<span class="string">"t"</span> : NumberLong(<span class="number">1</span>)</div><div class="line">			&#125;,</div><div class="line">			<span class="string">"optimeDate"</span> : ISODate(<span class="string">"2020-07-09T01:57:22Z"</span>),</div><div class="line">			<span class="string">"syncingTo"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"syncSourceHost"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"syncSourceId"</span> : <span class="number">-1</span>,</div><div class="line">			<span class="string">"infoMessage"</span> : <span class="string">"could not find member to sync from"</span>,</div><div class="line">			<span class="string">"electionTime"</span> : Timestamp(<span class="number">1594259802</span>, <span class="number">1</span>),</div><div class="line">			<span class="string">"electionDate"</span> : ISODate(<span class="string">"2020-07-09T01:56:42Z"</span>),</div><div class="line">			<span class="string">"configVersion"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"self"</span> : <span class="literal">true</span>,</div><div class="line">			<span class="string">"lastHeartbeatMessage"</span> : <span class="string">""</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="string">"_id"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"name"</span> : <span class="string">"127.0.0.1:27018"</span>,</div><div class="line">			<span class="string">"health"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"state"</span> : <span class="number">2</span>,</div><div class="line">			<span class="string">"stateStr"</span> : <span class="string">"SECONDARY"</span>,</div><div class="line">			<span class="string">"uptime"</span> : <span class="number">55</span>,</div><div class="line">			<span class="string">"optime"</span> : &#123;</div><div class="line">				<span class="string">"ts"</span> : Timestamp(<span class="number">1594259842</span>, <span class="number">1</span>),</div><div class="line">				<span class="string">"t"</span> : NumberLong(<span class="number">1</span>)</div><div class="line">			&#125;,</div><div class="line">			<span class="string">"optimeDurable"</span> : &#123;</div><div class="line">				<span class="string">"ts"</span> : Timestamp(<span class="number">1594259842</span>, <span class="number">1</span>),</div><div class="line">				<span class="string">"t"</span> : NumberLong(<span class="number">1</span>)</div><div class="line">			&#125;,</div><div class="line">			<span class="string">"optimeDate"</span> : ISODate(<span class="string">"2020-07-09T01:57:22Z"</span>),</div><div class="line">			<span class="string">"optimeDurableDate"</span> : ISODate(<span class="string">"2020-07-09T01:57:22Z"</span>),</div><div class="line">			<span class="string">"lastHeartbeat"</span> : ISODate(<span class="string">"2020-07-09T01:57:24.583Z"</span>),</div><div class="line">			<span class="string">"lastHeartbeatRecv"</span> : ISODate(<span class="string">"2020-07-09T01:57:25.341Z"</span>),</div><div class="line">			<span class="string">"pingMs"</span> : NumberLong(<span class="number">0</span>),</div><div class="line">			<span class="string">"lastHeartbeatMessage"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"syncingTo"</span> : <span class="string">"127.0.0.1:27017"</span>,</div><div class="line">			<span class="string">"syncSourceHost"</span> : <span class="string">"127.0.0.1:27017"</span>,</div><div class="line">			<span class="string">"syncSourceId"</span> : <span class="number">0</span>,</div><div class="line">			<span class="string">"infoMessage"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"configVersion"</span> : <span class="number">1</span></div><div class="line">		&#125;,</div><div class="line">		&#123;</div><div class="line">			<span class="string">"_id"</span> : <span class="number">2</span>,</div><div class="line">			<span class="string">"name"</span> : <span class="string">"127.0.0.1:27019"</span>,</div><div class="line">			<span class="string">"health"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"state"</span> : <span class="number">2</span>,</div><div class="line">			<span class="string">"stateStr"</span> : <span class="string">"SECONDARY"</span>,</div><div class="line">			<span class="string">"uptime"</span> : <span class="number">55</span>,</div><div class="line">			<span class="string">"optime"</span> : &#123;</div><div class="line">				<span class="string">"ts"</span> : Timestamp(<span class="number">1594259842</span>, <span class="number">1</span>),</div><div class="line">				<span class="string">"t"</span> : NumberLong(<span class="number">1</span>)</div><div class="line">			&#125;,</div><div class="line">			<span class="string">"optimeDurable"</span> : &#123;</div><div class="line">				<span class="string">"ts"</span> : Timestamp(<span class="number">1594259842</span>, <span class="number">1</span>),</div><div class="line">				<span class="string">"t"</span> : NumberLong(<span class="number">1</span>)</div><div class="line">			&#125;,</div><div class="line">			<span class="string">"optimeDate"</span> : ISODate(<span class="string">"2020-07-09T01:57:22Z"</span>),</div><div class="line">			<span class="string">"optimeDurableDate"</span> : ISODate(<span class="string">"2020-07-09T01:57:22Z"</span>),</div><div class="line">			<span class="string">"lastHeartbeat"</span> : ISODate(<span class="string">"2020-07-09T01:57:24.583Z"</span>),</div><div class="line">			<span class="string">"lastHeartbeatRecv"</span> : ISODate(<span class="string">"2020-07-09T01:57:25.340Z"</span>),</div><div class="line">			<span class="string">"pingMs"</span> : NumberLong(<span class="number">0</span>),</div><div class="line">			<span class="string">"lastHeartbeatMessage"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"syncingTo"</span> : <span class="string">"127.0.0.1:27017"</span>,</div><div class="line">			<span class="string">"syncSourceHost"</span> : <span class="string">"127.0.0.1:27017"</span>,</div><div class="line">			<span class="string">"syncSourceId"</span> : <span class="number">0</span>,</div><div class="line">			<span class="string">"infoMessage"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"configVersion"</span> : <span class="number">1</span></div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意：</p>
+<ol>
+<li><p>如果以上部署不成功，将3个节点<code>dbPath</code>文件夹下面的内容清空重新部署即可。</p>
+</li>
+<li><p>上述操作都在27017这个节点的<code>mongo</code>这个shell里完成。</p>
+</li>
+</ol>
+<p>如果第一次只部署一个节点，第一个节点会默认设置为Primary节点；后续再添加的节点，会自动成为Secondary节点。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conf = &#123;</div><div class="line">    <span class="string">"_id"</span> : <span class="string">"rstest"</span>,</div><div class="line">    <span class="string">"members"</span> : [</div><div class="line">        &#123; <span class="string">"_id"</span> : 0,  <span class="string">"host"</span> : <span class="string">"127.0.0.1:27017"</span> &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>登录一个<code>mongo终端</code>（默认使用27017），执行<code>rs.initiate(conf)</code>成功后。</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="string">"set"</span> : <span class="string">"rstest"</span>,</div><div class="line">	<span class="string">"date"</span> : ISODate(<span class="string">"2020-07-09T02:13:29.964Z"</span>),</div><div class="line">	<span class="string">"myState"</span> : <span class="number">1</span>,</div><div class="line">	<span class="string">"term"</span> : NumberLong(<span class="number">1</span>),</div><div class="line">	<span class="string">"syncingTo"</span> : <span class="string">""</span>,</div><div class="line">	<span class="string">"syncSourceHost"</span> : <span class="string">""</span>,</div><div class="line">	<span class="string">"syncSourceId"</span> : <span class="number">-1</span>,</div><div class="line">	......</div><div class="line">	<span class="string">"members"</span> : [</div><div class="line">		&#123;</div><div class="line">			<span class="string">"_id"</span> : <span class="number">0</span>,</div><div class="line">			<span class="string">"name"</span> : <span class="string">"127.0.0.1:27017"</span>,</div><div class="line">			<span class="string">"health"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"state"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"stateStr"</span> : <span class="string">"PRIMARY"</span>,</div><div class="line">			<span class="string">"uptime"</span> : <span class="number">327</span>,</div><div class="line">			<span class="string">"optime"</span> : &#123;</div><div class="line">				<span class="string">"ts"</span> : Timestamp(<span class="number">1594260802</span>, <span class="number">7</span>),</div><div class="line">				<span class="string">"t"</span> : NumberLong(<span class="number">1</span>)</div><div class="line">			&#125;,</div><div class="line">			<span class="string">"optimeDate"</span> : ISODate(<span class="string">"2020-07-09T02:13:22Z"</span>),</div><div class="line">			<span class="string">"syncingTo"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"syncSourceHost"</span> : <span class="string">""</span>,</div><div class="line">			<span class="string">"syncSourceId"</span> : <span class="number">-1</span>,</div><div class="line">			<span class="string">"infoMessage"</span> : <span class="string">"could not find member to sync from"</span>,</div><div class="line">			<span class="string">"electionTime"</span> : Timestamp(<span class="number">1594260802</span>, <span class="number">2</span>),</div><div class="line">			<span class="string">"electionDate"</span> : ISODate(<span class="string">"2020-07-09T02:13:22Z"</span>),</div><div class="line">			<span class="string">"configVersion"</span> : <span class="number">1</span>,</div><div class="line">			<span class="string">"self"</span> : <span class="literal">true</span>,</div><div class="line">			<span class="string">"lastHeartbeatMessage"</span> : <span class="string">""</span></div><div class="line">		&#125;</div><div class="line">	],</div><div class="line">	......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再依次执行<code>rs.add(&quot;127.0.0.1:27018&quot;)</code>和<code>rs.add(&quot;127.0.0.1:27019&quot;)</code>将另外两个节点加入<code>rstest</code>这个复制集，也可以得到和上面相同的结果。</p>
+<h4 id="2-验证ReplicaSet部署结果"><a href="#2-验证ReplicaSet部署结果" class="headerlink" title="2. 验证ReplicaSet部署结果"></a>2. 验证ReplicaSet部署结果</h4><p>进入Primary节点，写入数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">rstest:PRIMARY&gt; use test</div><div class="line">switched to db test</div><div class="line">rstest:PRIMARY&gt; show collections</div><div class="line">rstest:PRIMARY&gt; db.test.insert(&#123;'name': 'jackson'&#125;)</div><div class="line">WriteResult(&#123; "nInserted" : 1 &#125;)</div><div class="line">rstest:PRIMARY&gt; show collections</div><div class="line">test</div><div class="line">rstest:PRIMARY&gt; db.test.find()</div><div class="line">&#123; "_id" : ObjectId("5f06e0a7051a1b4f12f407bb"), "name" : "jackson" &#125;</div></pre></td></tr></table></figure>
+<p>进入Secondary节点，查看数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">rstest:SECONDARY&gt; rs.slaveOk()</div><div class="line">rstest:SECONDARY&gt; use test</div><div class="line">switched to db test</div><div class="line">rstest:SECONDARY&gt; show collections</div><div class="line">test</div><div class="line">rstest:SECONDARY&gt; db.test.find()</div><div class="line">&#123; "_id" : ObjectId("5f06e0a7051a1b4f12f407bb"), "name" : "jackson" &#125;</div></pre></td></tr></table></figure>
+<h4 id="3-ReplicaSet-pymongo连接测试"><a href="#3-ReplicaSet-pymongo连接测试" class="headerlink" title="3. ReplicaSet pymongo连接测试"></a>3. ReplicaSet pymongo连接测试</h4><p>MongoDB连接字符串：</p>
+<p>对于单机模式下的数据库连接，使用<code>mongo://127.0.0.1:27017/test</code>进行连接；</p>
+<p>对于复制集模式，除了上面的方式外，也可以使用</p>
+<p><code>mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/test?replicaSet=rstest</code>进行连接。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongodb://[<span class="string">username:password@</span>]host1[<span class="string">:port1</span>][<span class="symbol">,host2[:port2</span>],...[<span class="string">,hostN[:portN</span>]]][<span class="string">/[database</span>][<span class="symbol">?options</span>]]</div></pre></td></tr></table></figure>
+<p>测试代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string">测试读取replicaset数据</span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> pymongo</div><div class="line"></div><div class="line"><span class="comment"># client = pymongo.MongoClient('localhost',27019)</span></div><div class="line">client = pymongo.MongoClient(<span class="string">'mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/test?replicaSet=rstest'</span>)</div><div class="line"></div><div class="line">db = client[<span class="string">'test'</span>]</div><div class="line">table = db[<span class="string">'test'</span>]</div><div class="line"></div><div class="line">content = [item <span class="keyword">for</span> item <span class="keyword">in</span> table.find()]</div><div class="line">print(<span class="string">'content:'</span>, content)</div></pre></td></tr></table></figure>
+<h4 id="4-关闭方法"><a href="#4-关闭方法" class="headerlink" title="4. 关闭方法"></a>4. 关闭方法</h4><p>关闭方法：</p>
+<ol>
+<li><p>使用./mongo进入shell控制台，输入use admin，然后输入db.shutdownServer()关闭服务。</p>
+</li>
+<li><p>直接kill进程号</p>
+</li>
+</ol>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="https://blog.csdn.net/u010311313/article/details/46948995" target="_blank" rel="external">MongoDB安装、配置、启动（MAC）</a></li>
+<li><a href="http://www.imooc.com/article/22733" target="_blank" rel="external">Mac环境下安装和配置MongoDB</a></li>
+<li><a href="http://api.mongodb.com/python/current/tutorial.html" target="_blank" rel="external">MongoDB Tutorial</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/04/06/convert-pandas-dataframe-type/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -433,7 +716,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -459,7 +742,7 @@
         
       
     </div>
-    </div>
+    
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -643,7 +926,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -666,7 +949,7 @@
         
       
     </div>
-    </div>
+    
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -850,7 +1133,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -879,7 +1162,7 @@
         
       
     </div>
-    </div>
+    
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -1063,7 +1346,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -1096,214 +1379,7 @@
         
       
     </div>
-    </div>
-
-    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
-    <script>
-        const btw = new BTWPlugin();
-        btw.init({
-            id: 'container-openwrite',
-            blogId: '17404-1571647601910-995',
-            name: '大西洋暖流',
-            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
-            keyword: 'bigbigben',
-        });
-    </script>
-
     
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/03/23/reset-github-push-history/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="大西洋暖流">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="大西洋暖流">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/23/reset-github-push-history/" itemprop="url">清除GitHub提交历史记录</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T09:24:46+08:00">
-                2018-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/programming/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/03/23/reset-github-push-history/" class="leancloud_visitors" data-flag-title="清除GitHub提交历史记录">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  636
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div id="container-openwrite">
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="/2018/03/23/reset-github-push-history/alex-vasey-225127-unsplash.jpg" alt="clean air"></p>
-<p>（Photo by <a href="https://unsplash.com/photos/jWaUBjlx0Sw?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Alex Vasey</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Unsplash</a>）</p>
-<p>昨天提交代码到GitHub仓库时，不小心把敏感信息（登陆账号和登陆密码）提交了上去。发现后立马在GitHub上修改源代码，将里面的敏感信息删除，删除后查看这个文件的历史操作记录，包含敏感信息的历史版本仍然存在。</p>
-<p>以为删除文件可以解决这个问题，然而并非如此，把整个文件删除后，历史记录并没有被清空，反而增多一条删除文件的操作，前面两步操作的记录仍然存在。</p>
-<p>网上搜了一大圈解决办法，最终找到的解决办法如下。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/23/reset-github-push-history/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    </div>
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -1402,7 +1478,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1539,7 +1615,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <!-- change icon to love on 2018/05/04
     <i class="fa fa-user"></i>
@@ -1557,7 +1633,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">93.5k</span>
+    <span title="Site words total count">93.9k</span>
   
 </div>
 

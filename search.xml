@@ -3,6 +3,36 @@
   
     
     <entry>
+      <title><![CDATA[商票工作近况]]></title>
+      <url>/2022/01/22/new-job-in-spzj/</url>
+      <content type="html"><![CDATA[<p>去年7月份决定来商票之家项目工作，就注定要转变为一个Java程序员。</p>
+<p>以前没正式参与过Java项目，半年左右时间，从零接手了一套SpringBoot+Vue互联网票据系统。刚开始连Spring的注解、复杂一点的泛型都看不懂，现在基本做到熟练上手，并且对业务流程进行大刀阔斧地调整，这半年时间里面，感觉自己进步很多。</p>
+<p>写过Java之后，才知道这门语言深不见底。见识到行业内高手的水平之后，才知道目前欠缺的依旧很多。</p>
+<p>要说职业生涯最大的遗憾是什么，那就是没有早一点学习Java，错过了提升技术水平的最佳时机。还在现在开始也不算晚，人生找准了目标其它一切都不是问题。</p>
+<p>我的目标很实际。</p>
+<ol>
+<li>可以独立开发出Web产品，以后在互联网世界里支起一个小摊，当一个沿街叫卖的小贩，自己给自己打工。借助GitHub，这个目标现在差不多可以实现；</li>
+<li>技术水平达到架构师程度，简单点说是可以独立写出Web框架。现在正在朝这个方向努力，未来可期。</li>
+</ol>
+<p>在同学群里扯淡，说“现在努力写代码是为了以后可以不用写代码”，等哪天技术水平达到了理想中的程度，就可以考虑去做下一阶段的事情了。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 编程 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[工作和躺平]]></title>
       <url>/2021/06/27/career-and-unworldliness/</url>
       <content type="html"><![CDATA[<p><img src="/2021/06/27/career-and-unworldliness/white-rainforest-MpIoPBR42qg.jpg" alt=""></p>
@@ -535,9 +565,9 @@
             
             <tag> Python </tag>
             
-            <tag> Django </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> Django </tag>
             
         </tags>
         
@@ -609,9 +639,9 @@
             
             <tag> Python </tag>
             
-            <tag> Docker </tag>
-            
             <tag> Airflow </tag>
+            
+            <tag> Docker </tag>
             
             <tag> Docker-compose </tag>
             
@@ -724,9 +754,9 @@
             
             <tag> Python </tag>
             
-            <tag> Docker </tag>
-            
             <tag> Airflow </tag>
+            
+            <tag> Docker </tag>
             
             <tag> Kubernetes </tag>
             
@@ -1134,9 +1164,9 @@
         
         <tags>
             
-            <tag> Docker </tag>
-            
             <tag> Airflow </tag>
+            
+            <tag> Docker </tag>
             
             <tag> Kubernetes </tag>
             
@@ -4285,9 +4315,9 @@
         
         <tags>
             
-            <tag> 雪球 </tag>
-            
             <tag> 股票 </tag>
+            
+            <tag> 雪球 </tag>
             
         </tags>
         

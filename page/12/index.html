@@ -306,6 +306,215 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/02/27/learning-flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="大西洋暖流">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="大西洋暖流">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/27/learning-flask/" itemprop="url">Flask学习笔记</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-27T11:01:56+08:00">
+                2018-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/27/learning-flask/" class="leancloud_visitors" data-flag-title="Flask学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,590
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  18
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/2018/02/27/learning-flask/logo-full.png" alt="Flask Logo"></p>
+<p>学习一门语言，除了熟悉语法知识之外，还需要懂一个框架，这样才具备生产力。Python生态强大在于它有众多各式各样的第三方包，有时光会Python语法解决不了问题，必须结合第三方框架协同来完成任务。</p>
+<p>这里是我学习Flask Web开发过程中整理的笔记，我使用的资料是大名鼎鼎的“狗书”第一版和Flask官网手册。学习方法是照着“狗书”里面的内容依葫芦画瓢一步一步地边写边测。书作者<a href="https://flaskbook.com" target="_blank" rel="external">Miguel Grinberg</a>的网站上有最新版的内容，想获取第二版或视频教程可以移步观看。</p>
+<p><img src="/2018/02/27/learning-flask/cover-of-flask-web-development.png" alt="cover of flask web development"></p>
+<p>这篇博文纪录学习过程中遇到的重点和难点，前后没有相关性，属于看到哪儿写到哪儿那种，大部分是摘抄，有个人思考的部分是“<strong><a href="#jump1">同步发送邮件？异步发送邮件？</a></strong>” 、“<strong><a href="#jump2">数据库多对多关联关系</a></strong>” 、“<strong><a href="#jump3">部署Python Flasky程序到Heroku</a></strong>”这几节。</p>
+<p>如果读者朋友发现哪里有写得不对的地方，欢迎指正。</p>
+<h3 id="Flask网址重定向问题"><a href="#Flask网址重定向问题" class="headerlink" title="Flask网址重定向问题"></a>Flask网址重定向问题</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line">app = Flask(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/projects/')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">projects</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'The project page'</span></div><div class="line"></div><div class="line"><span class="meta">@app.route('/about')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">about</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">'The about page'</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">	app.run(debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/02/27/learning-flask/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+
+    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+    <script>
+        const btw = new BTWPlugin();
+        btw.init({
+            id: 'container-openwrite',
+            blogId: '17404-1571647601910-995',
+            name: '大西洋暖流',
+            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
+            keyword: 'bigbigben',
+        });
+    </script>
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/02/24/mhxy-game-account-sold/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -433,7 +642,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -456,7 +665,7 @@
         
       
     </div>
-    </div>
+    
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -640,7 +849,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -670,7 +879,7 @@
         
       
     </div>
-    </div>
+    
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -854,7 +1063,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -877,7 +1086,7 @@
         
       
     </div>
-    </div>
+    
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -1061,7 +1270,7 @@
     
     
     
-    <div id="container-openwrite">
+    
     <div class="post-body han-init-context" itemprop="articleBody">
 
       
@@ -1084,211 +1293,7 @@
         
       
     </div>
-    </div>
-
-    <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
-    <script>
-        const btw = new BTWPlugin();
-        btw.init({
-            id: 'container-openwrite',
-            blogId: '17404-1571647601910-995',
-            name: '大西洋暖流',
-            qrcode: 'https://bigbigben.com/about/qrcode_for_dxy-nuanliu.jpg',
-            keyword: 'bigbigben',
-        });
-    </script>
-
     
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bigbigben.com/2018/01/13/write-ebook-with-gitbook/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="大西洋暖流">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="大西洋暖流">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/13/write-ebook-with-gitbook/" itemprop="url">使用GitBook发布电子书</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T21:26:15+08:00">
-                2018-01-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/learning/" itemprop="url" rel="index">
-                    <span itemprop="name">学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/01/13/write-ebook-with-gitbook/" class="leancloud_visitors" data-flag-title="使用GitBook发布电子书">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  325
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div id="container-openwrite">
-    <div class="post-body han-init-context" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="/2018/01/13/write-ebook-with-gitbook/daniel-cheung-129839.jpg" alt="Stormtrooper walking on sand"></p>
-<p>(Photo by <a href="https://unsplash.com/photos/cPF2nlWcMY4?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Daniel Cheung</a> on <a href="https://unsplash.com/search/photos/geek?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Unsplash</a>)</p>
-<p>今天发现可以使用GitBook写书，我觉得很有趣，折腾了一天，基本上把一整套流程都弄懂了。</p>
-<p>已经把学Python过程中遇到的问题以及整理的笔记发布到GitBook上面了，这是我的第一本电子书。<a href="https://pythonbook.bigbigben.com" target="_blank" rel="external">网址</a>在此，欢迎各位客官查阅、指正。以后有这么一个地方专门用来记录笔记和查阅资料，还是挺方便的，当然，作为第一本电子书，我肯定会把它持续更新，一直迭代下去。</p>
-<p>2018年的第二天，我把<a href="http://bigbigben.com/2018/01/01/2018-new-years-resolution/">之前说过要买域名的事儿</a>办了，最终选择了<strong><u>bigbigben.com</u></strong>，和以前用的bigbigben.cn类似，同一个前缀，只是把后缀换成.com了。在腾讯云里面一次性注册了10年，免得忘记续费麻烦，之前用的bigbigben.cn被别人抢注了，估计得花点钱才能搞回来，有点小郁闷，索性直接放弃，启用这个新域名，就一次性注册到底，估计很可能要陪我一生了。:sweat_smile:</p>
-<p>今天意外发现，李笑来两年前就在使用GitBook发布电子书，我觉得挺前沿的，他的著作《<a href="https://b.xinshengdaxue.com" target="_blank" rel="external">新生</a>》，推荐给大家，我读过，非常好。</p>
-
-          
-        
-      
-    </div>
-    </div>
 
     <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
     <script>
@@ -1387,7 +1392,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1524,7 +1529,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <!-- change icon to love on 2018/05/04
     <i class="fa fa-user"></i>
@@ -1542,7 +1547,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">93.5k</span>
+    <span title="Site words total count">93.9k</span>
   
 </div>
 
