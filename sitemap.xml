@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://bigbigben.com/2022/01/22/new-job-in-spzj/</loc>
+    <loc>http://bigbigben.com/2022/03/03/about-docker-for-mac/</loc>
     
-    <lastmod>2022-01-21T20:45:50.359Z</lastmod>
+    <lastmod>2022-03-05T15:23:13.282Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bigbigben.com/categories/index.html</loc>
+    <loc>http://bigbigben.com/2022/01/22/new-job-in-spzj/</loc>
     
-    <lastmod>2022-01-21T20:09:09.928Z</lastmod>
+    <lastmod>2022-01-21T20:45:50.359Z</lastmod>
     
   </url>
   
@@ -24,6 +24,13 @@
   
   <url>
     <loc>http://bigbigben.com/tags/index.html</loc>
+    
+    <lastmod>2022-01-21T20:09:09.928Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bigbigben.com/categories/index.html</loc>
     
     <lastmod>2022-01-21T20:09:09.928Z</lastmod>
     
