@@ -5,6 +5,10 @@ categories: [编程]
 tags: [Docker, docker-connector]
 ---
 
+![](about-docker-for-mac/venti-views-1cqIcrWFQBI-unsplash.jpg)
+
+(Photo by [Venti Views](https://unsplash.com/@ventiviews?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/docker?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)  )
+
 macOS上面Docker实现方式和Linux不一样，简单说macOS将Docker服务端(docker daemon守护进程)部署在一台虚拟机里面，而Linux里面Docker服务端直接作为宿主机的一个进程。这导致两种平台上Docker容器和其宿主机的网络通信方式有很大不同。
 
 简单的表象是，Linux主机上会有一个docker0网卡，而macOS上没有docker0网卡；带来的区别是Linux上部署的容器应用默认和宿主机就是互联互通的，而macOS宿主机不能直接连通容器。
@@ -173,13 +177,13 @@ mindoc是一款在线文档管理系统，其它就不多介绍了，自己看�
 
 #### 安装docker-connector服务
 
-a. 使用brew安装docker-connector
+1. 使用brew安装docker-connector
 
 ```shell
 brew install wenjunxiao/brew/docker-connector
 ```
 
-b. 执行下面命令将docker所有 `bridge` 网络都添加到docker-connector路由
+2. 执行下面命令将docker所有 `bridge` 网络都添加到docker-connector路由
 
 ```shell
 docker network ls --filter driver=bridge --format "{{.ID}}" | xargs docker network inspect --format "route {{range .IPAM.Config}}{{.Subnet}}{{end}}" >> /usr/local/etc/docker-connector.conf
@@ -187,19 +191,19 @@ docker network ls --filter driver=bridge --format "{{.ID}}" | xargs docker netwo
 
 （/usr/local/etc/docker-connector.conf是安装docker-connector后生成的配置文件）
 
-c. 使用sudo启动docker-connector服务
+3. 使用sudo启动docker-connector服务
 
 ```shell
 sudo brew services start docker-connector
 ```
 
-d. 使用下面命令创建wenjunxiao/mac-docker-connector容器，要求使用 `host` 网络并且允许 `NET_ADMIN`
+4. 使用下面命令创建wenjunxiao/mac-docker-connector容器，要求使用 `host` 网络并且允许 `NET_ADMIN`
 
 ```shell
 docker run -it -d --restart always --net host --cap-add NET_ADMIN --name connector wenjunxiao/mac-docker-connector
 ```
 
-docker-connector容器启动成功后，macOS宿主机即可访问其它容器网络。
+5. docker-connector容器启动成功后，macOS宿主机即可访问其它容器网络
 
 ![](about-docker-for-mac/macos-host-ping-container2.jpg)
 
