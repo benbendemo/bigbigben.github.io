@@ -21,6 +21,8 @@ macOS上面Docker实现方式和Linux不一样，简单说macOS将Docker服务�
 
 ![](about-docker-for-mac/linux-docker0.jpg)
 
+<!--more-->
+
 ### Linux宿主机ping容器
 
 启动一个nginx容器（默认使用bridge模式）：
