@@ -5,10 +5,13 @@
     <entry>
       <title><![CDATA[Mac宿主机访问Docker容器网络]]></title>
       <url>/2022/03/03/about-docker-for-mac/</url>
-      <content type="html"><![CDATA[<p>macOS上面Docker实现方式和Linux不一样，简单说macOS将Docker服务端(docker daemon守护进程)部署在一台虚拟机里面，而Linux里面Docker服务端直接作为宿主机的一个进程。这导致两种平台上Docker容器和其宿主机的网络通信方式有很大不同。</p>
+      <content type="html"><![CDATA[<p><img src="/2022/03/03/about-docker-for-mac/venti-views-1cqIcrWFQBI-unsplash.jpg" alt=""></p>
+<p>(Photo by <a href="https://unsplash.com/@ventiviews?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Venti Views</a> on <a href="https://unsplash.com/s/photos/docker?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank" rel="external">Unsplash</a>  )</p>
+<p>macOS上面Docker实现方式和Linux不一样，简单说macOS将Docker服务端(docker daemon守护进程)部署在一台虚拟机里面，而Linux里面Docker服务端直接作为宿主机的一个进程。这导致两种平台上Docker容器和其宿主机的网络通信方式有很大不同。</p>
 <p>简单的表象是，Linux主机上会有一个docker0网卡，而macOS上没有docker0网卡；带来的区别是Linux上部署的容器应用默认和宿主机就是互联互通的，而macOS宿主机不能直接连通容器。</p>
 <h3 id="Linux查看docker0网卡"><a href="#Linux查看docker0网卡" class="headerlink" title="Linux查看docker0网卡"></a>Linux查看docker0网卡</h3><p>在阿里云ECS里面启动了Docker服务，终端输入ifconfig查看docker0网卡（容器默认使用bridge模式部署，都通过这个docker0网卡与宿主机通信）</p>
 <p><img src="/2022/03/03/about-docker-for-mac/linux-docker0.jpg" alt=""></p>
+<a id="more"></a>
 <h3 id="Linux宿主机ping容器"><a href="#Linux宿主机ping容器" class="headerlink" title="Linux宿主机ping容器"></a>Linux宿主机ping容器</h3><p>启动一个nginx容器（默认使用bridge模式）：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -d --name nginx nginx</div></pre></td></tr></table></figure>
 <p>查找nginx容器ip地址：</p>
@@ -56,16 +59,26 @@
 </li>
 </ol>
 <h3 id="macOS宿主机连接容器网络"><a href="#macOS宿主机连接容器网络" class="headerlink" title="macOS宿主机连接容器网络"></a>macOS宿主机连接容器网络</h3><p>查到几种方式，比较一下发现使用<a href="https://github.com/wenjunxiao/mac-docker-connector" target="_blank" rel="external">docker-connector</a>最简单。</p>
-<h4 id="安装docker-connector服务"><a href="#安装docker-connector服务" class="headerlink" title="安装docker-connector服务"></a>安装docker-connector服务</h4><p>a. 使用brew安装docker-connector</p>
+<h4 id="安装docker-connector服务"><a href="#安装docker-connector服务" class="headerlink" title="安装docker-connector服务"></a>安装docker-connector服务</h4><ol>
+<li>使用brew安装docker-connector</li>
+</ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install wenjunxiao/brew/docker-connector</div></pre></td></tr></table></figure>
-<p>b. 执行下面命令将docker所有 <code>bridge</code> 网络都添加到docker-connector路由</p>
+<ol>
+<li>执行下面命令将docker所有 <code>bridge</code> 网络都添加到docker-connector路由</li>
+</ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker network ls --filter driver=bridge --format "&#123;&#123;.ID&#125;&#125;" | xargs docker network inspect --format "route &#123;&#123;range .IPAM.Config&#125;&#125;&#123;&#123;.Subnet&#125;&#125;&#123;&#123;end&#125;&#125;" &gt;&gt; /usr/local/etc/docker-connector.conf</div></pre></td></tr></table></figure>
 <p>（/usr/local/etc/docker-connector.conf是安装docker-connector后生成的配置文件）</p>
-<p>c. 使用sudo启动docker-connector服务</p>
+<ol>
+<li>使用sudo启动docker-connector服务</li>
+</ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo brew services start docker-connector</div></pre></td></tr></table></figure>
-<p>d. 使用下面命令创建wenjunxiao/mac-docker-connector容器，要求使用 <code>host</code> 网络并且允许 <code>NET_ADMIN</code></p>
+<ol>
+<li>使用下面命令创建wenjunxiao/mac-docker-connector容器，要求使用 <code>host</code> 网络并且允许 <code>NET_ADMIN</code></li>
+</ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -d --restart always --net host --cap-add NET_ADMIN --name connector wenjunxiao/mac-docker-connector</div></pre></td></tr></table></figure>
-<p>docker-connector容器启动成功后，macOS宿主机即可访问其它容器网络。</p>
+<ol>
+<li>docker-connector容器启动成功后，macOS宿主机即可访问其它容器网络</li>
+</ol>
 <p><img src="/2022/03/03/about-docker-for-mac/macos-host-ping-container2.jpg" alt=""></p>
 <h3 id="其它补充"><a href="#其它补充" class="headerlink" title="其它补充"></a>其它补充</h3><p>如果macOS里面需要使用代理，proxychains4是比较好的选择。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1. 使用brew install proxychains4进行安装</div><div class="line">2. 在/usr/local/Cellar/proxychains-ng/4.8.1/etc/proxychains.conf配置Socks5地址</div><div class="line">3. 使用proxychains4 command走代理访问，不加proxychains4的command不受影响</div></pre></td></tr></table></figure>
@@ -2764,6 +2777,35 @@
     </entry>
     
     <entry>
+      <title><![CDATA[Hello World]]></title>
+      <url>/2018/04/24/hello-world/</url>
+      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 编程 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Hadoop </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Ubuntu16.04安装Hadoop3.1.0]]></title>
       <url>/2018/04/24/hadoop-install/</url>
       <content type="html"><![CDATA[<p>Ubuntu系统稳定性有点差，今天清理空间后，重新启动无法进入图形界面。考虑到稳定性还有我的MBP磁盘空间不够大，决定在本机搭建Hadoop3.1.0环境。</p>
@@ -2799,35 +2841,6 @@
 <li><p><a href="https://www.zhihu.com/question/19795366" target="_blank" rel="external">零基础学习 Hadoop 该如何下手？</a></p>
 </li>
 </ul>
-]]></content>
-      
-        <categories>
-            
-            <category> 编程 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> Hadoop </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Hello World]]></title>
-      <url>/2018/04/24/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 ]]></content>
       
         <categories>
