@@ -2,7 +2,7 @@
 title: Mac宿主机访问Docker容器网络
 date: 2022-03-03 15:19:05
 categories: [编程]
-tags: [Docker, docker-connector]
+tags: [Docker,docker-connector,mindoc]
 ---
 
 ![](about-docker-for-mac/venti-views-1cqIcrWFQBI-unsplash.jpg)
@@ -226,3 +226,4 @@ docker run -it -d --restart always --net host --cap-add NET_ADMIN --name connect
 **参考资料**
 
 - [Docker for Mac 的网络问题及解决办法](https://www.haoyizebo.com/posts/fd0b9bd8/)
+- [MinDoc帮助手册](https://doc.gsw945.com/docs/mindoc-docs)
