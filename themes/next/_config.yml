@@ -55,11 +55,7 @@ footer:
     #version: true
   # -------------------------------------------------------------
   # Any custom text can be defined here.
-  #custom_text: Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a>
-  #custom_text:
-    #  <div style="width:300px;margin:0 auto; padding:20px 0;">
-    #    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030602003362" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p></a>
-    #  </div>
+  # custom_text: <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;"><a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2020075576号</a></p>
 
 # ---------------------------------------------------------------
 # SEO Settings
