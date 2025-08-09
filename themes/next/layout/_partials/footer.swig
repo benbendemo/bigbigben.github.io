@@ -35,7 +35,10 @@
 -->
 
   <div style="width:auto; margin:0 auto; padding:auto 0;">
-        <img src="/images/ba-icon.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">粤公网安备 44030602003362号</p>
+        <img src="/images/ba-icon.png" style="float:left;"/>
+          <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">
+            <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2020075576号</a>
+          </p>
   </div>
 
 {% endif %}
