@@ -146,17 +146,10 @@ links_title: 常用链接
 #links_layout: block
 links_layout: inline
 links:
-  廖雪峰: https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000
+  廖雪峰: https://liaoxuefeng.com/books/python/introduction/index.html
   阮一峰: http://www.ruanyifeng.com/blog/
-  王垠: http://www.yinwang.org
   酷壳: https://coolshell.cn
-  Python之禅: https://foofish.net
-  Python入坑指南: http://python-web-guide.readthedocs.io/zh/latest/index.html
-  Echo李金: http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb
-  Flask资源: https://www.linuxhub.org/share/python_flask_res.html
-  Python面试题: https://github.com/benbendemo/interview_python
-  HelloGitHub: https://github.com/521xueweihan/HelloGitHub
-
+  
 # Sidebar Avatar
 # in theme directory(source/images): /images/avatar.gif
 # in site  directory(source/uploads): /uploads/avatar.gif

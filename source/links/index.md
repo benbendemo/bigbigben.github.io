@@ -14,17 +14,9 @@ comments: false
 
 ### 知名博主
 
-- [什么是描述符（descriptor）](https://foofish.net/what-is-descriptor-in-python.html)
-- [Funhacks](https://funhacks.net/explore-python/)
-- [廖雪峰](https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000)
-- [李金Echo](http://nbviewer.jupyter.org/github/lijin-THU/notes-python/blob/master/index.ipynb)
-- [Vamei](http://www.cnblogs.com/vamei/tag/Python/default.html?page=1)
-- [Python资源收集](https://github.com/benbendemo/python-resource)
-- [关于Python的面试题](https://github.com/benbendemo/interview_python)
-- [颜海镜](http://yanhaijing.com/basejs/)
+- [廖雪峰](https://liaoxuefeng.com/books/python/introduction/index.html)
 - [阮一峰](http://www.ruanyifeng.com/blog/javascript/)
 - [酷壳](https://coolshell.cn)
-- [Python Web 入坑指南](http://python-web-guide.readthedocs.io/zh/latest/index.html)
 
 ### 精华文章
 
@@ -41,14 +33,6 @@ comments: false
 #### SQLAlchemy 
 
 [SQLAlchemy 1.2 Documentation](http://docs.sqlalchemy.org/en/latest/orm/tutorial.html)
-
-#### 面向对象
-
-[面向对象的程序设计](http://www.cnblogs.com/charles1ee/p/6697984.html)
-
-#### Flask
-
-[Python Flask 资源大全](https://www.linuxhub.org/share/python_flask_res.html)
 
 #### Unbound和Bound方法
 
@@ -71,5 +55,3 @@ comments: false
 #### 性能优化
 
 [Python性能优化的20条建议](https://segmentfault.com/a/1190000000666603)
-
-[Python 代码性能优化技巧](https://www.ibm.com/developerworks/cn/linux/l-cn-python-optim/)
